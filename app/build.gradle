@@ -1,0 +1,135 @@
+plugins {
+    id 'com.android.application'
+    id 'org.greenrobot.greendao'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 31
+    defaultConfig {
+        applicationId "com.pengxh.autodingding"
+        minSdkVersion 23
+        targetSdkVersion 31
+        versionCode 6
+        versionName "1.0.2"
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "c48c0906e554f88ad914329b", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "jpush", //暂时填写默认值即可.
+                VERSION_NAME : versionName,
+                CHANNEL : 'self',
+                DEBUG : true,
+                MEIZU_APPKEY : "MZ-魅族的APPKEY",
+                MEIZU_APPID : "MZ-魅族的APPID",
+                XIAOMI_APPID : "MI-小米的APPID",
+                XIAOMI_APPKEY : "MI-小米的APPKEY",
+                OPPO_APPKEY : "OP-oppo的APPKEY",
+                OPPO_APPID : "OP-oppo的APPID",
+                OPPO_APPSECRET : "OP-oppo的APPSECRET",
+                VIVO_APPKEY : "vivo的APPKEY",
+                VIVO_APPID : "vivo的APPID"
+        ]
+    }
+
+    signingConfigs {
+        sign {
+            storeFile file("../sxwdsoft.jks")
+            storePassword "sxwdsoft4989"
+            keyAlias "sxwdsoft"
+            keyPassword "sxwdsoft4989"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // 启用资源压缩，需配合 minifyEnabled=true 使用
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.sign
+        }
+        debug {
+            debuggable true
+            manifestPlaceholders["DEBUG"] = debuggable
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.sign
+            //禁用PNG压缩。
+            crunchPngs false
+        }
+    }
+    packagingOptions {
+//        pickFirst 'META-INF/LICENSE.txt' // picks the JavaMail license file
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+    greendao {
+        schemaVersion 1//数据库版本号
+        targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
+        daoPackage 'com.pengxh.autodingding.greendao'//设置DaoMaster、DaoSession、Dao包名
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+    buildToolsVersion '31.0.0'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.android.databinding:viewbinding:7.2.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    //基础依赖库
+    implementation 'com.github.AndroidCoderPeng:Android-library:1.6.0'
+    //Google官方授权库
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
+    implementation 'com.sun.mail:android-mail:1.6.6'
+    implementation 'com.sun.mail:android-activation:1.6.6'
+    //异步响应式
+    //retrofit okhttp
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
+    //上拉加载下拉刷新
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
+    implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
+    //沉浸式状态栏。基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    //fragment快速实现
+    implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+    //webView
+    implementation 'com.just.agentweb:agentweb:4.1.3'
+    //ZBar扫一扫(综合Java和C++扫码)
+    implementation 'cn.bertsir.zbarLibary:zbarlibary:1.4.2'
+    //数据库框架
+    implementation 'org.greenrobot:greendao:3.3.0'
+    implementation "com.blankj:utilcodex:1.30.5"
+    implementation 'cn.jiguang.sdk:jcore:2.7.2'  // 此处以JCore 2.7.2 版本为例。
+    implementation 'cn.jiguang.sdk:jpush:4.0.0'  // 此处以JPush 4.0.0 版本为例
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+
+}
