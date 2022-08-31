@@ -184,8 +184,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:text="你的推送Registration ID,用来在消息后台定向发指令用"
+            android:text="你的推送Registration ID,用来在指令手机的推送设置里定向发指令用，目前有检查在线指令和远程打开钉钉指令"
             android:textColor="@color/colorText" />
 
         <TextView

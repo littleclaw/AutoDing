@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProject/AutoDing/app/src/main/res/drawable/svg_back.xml" value="0.118" />
+        <entry key="..\:/AndroidProject/AutoDing/app/src/main/res/layout/fragment_mail_conf.xml" value="0.3333333333333333" />
+        <entry key="..\:/AndroidProject/AutoDing/app/src/main/res/layout/fragment_push.xml" value="0.19947916666666668" />
         <entry key="..\:/AndroidProject/AutoDing/app/src/main/res/layout/fragment_settings.xml" value="0.19947916666666668" />
         <entry key="..\:/AndroidProject/AutoDingding/app/src/main/res/layout/activity_history.xml" value="0.1" />
         <entry key="..\:/AndroidProject/AutoDingding/app/src/main/res/layout/activity_main.xml" value="0.19947916666666668" />

@@ -147,28 +147,10 @@ public class SettingsFragment extends AndroidxBaseFragment<FragmentSettingsBindi
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.emailLayout) {
-            new InputDialog.Builder()
-                    .setContext(context)
-                    .setTitle("设置邮箱")
-                    .setHintMessage("请输入邮箱")
-                    .setNegativeButton("取消")
-                    .setPositiveButton("确定")
-                    .setOnDialogButtonClickListener(new InputDialog.OnDialogButtonClickListener() {
-                        @Override
-                        public void onConfirmClick(String value) {
-                            if (!value.isEmpty()) {
-                                Utils.saveEmailAddress(value);
-                                viewBinding.emailTextView.setText(value);
-                            } else {
-                                EasyToast.showToast("什么都还没输入呢！", EasyToast.ERROR);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelClick() {
-
-                        }
-                    }).build().show();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragmentContainer, new MailConfFragment())
+                    .commit();
         } else if (id == R.id.historyLayout) {
             startActivity(new Intent(context, HistoryRecordActivity.class));
         } else if (id == R.id.introduceLayout) {

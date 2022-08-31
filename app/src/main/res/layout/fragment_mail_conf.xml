@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="推送设置"
+            android:text="邮箱设置"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,14 +43,34 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
-        android:id="@+id/etTargetRegId"
+        android:id="@+id/etSenderEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:layout_marginTop="8dp"
-        android:hint="输入推送目标的注册id"
+        android:hint="发件QQ邮箱地址，如123456@qq.com"
+        android:inputType="textEmailAddress"
         style="@style/Widget.AppCompat.EditText"
         app:layout_constraintTop_toBottomOf="@id/clHeader"/>
+    <EditText
+        android:id="@+id/etSenderEmailAuth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginTop="8dp"
+        android:hint="发件QQ邮箱授权码，在qq邮箱设置里获取"
+        style="@style/Widget.AppCompat.EditText"
+        app:layout_constraintTop_toBottomOf="@id/etSenderEmailAddress"/>
+    <EditText
+        android:id="@+id/etReceiverEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginTop="8dp"
+        android:hint="收件QQ邮箱地址，可以与发件邮箱相同"
+        android:inputType="textEmailAddress"
+        style="@style/Widget.AppCompat.EditText"
+        app:layout_constraintTop_toBottomOf="@id/etSenderEmailAuth"/>
 
     <Button
         android:id="@+id/btnCheck"
@@ -58,39 +78,16 @@
         android:layout_height="wrap_content"
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/etTargetRegId"
-        android:backgroundTint="@color/iOSGreen"
-        android:text="推送检查指令"/>
+        app:layout_constraintTop_toBottomOf="@id/etReceiverEmailAddress"
+        android:backgroundTint="@android:color/holo_orange_light"
+        android:text="测试邮箱配置"/>
     <Button
-        android:id="@+id/btnPush"
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         app:layout_constraintTop_toBottomOf="@id/btnCheck"
-        android:backgroundTint="@color/iOSGreen"
-        android:text="推送打开钉钉指令"/>
-
-    <TextView
-        android:id="@+id/tvSelfRegId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnPush"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="本机注册id:"/>
-    <Button
-        android:id="@+id/btnCopyRegId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        android:textColor="@color/white"
-        android:text="复制本机注册id"
-        android:backgroundTint="@color/orange"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSelfRegId"
-        />
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:text="保存邮箱配置"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
