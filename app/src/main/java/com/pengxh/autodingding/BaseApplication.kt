@@ -1,0 +1,61 @@
+package com.pengxh.autodingding
+
+import android.app.Application
+import android.content.Context
+import android.util.Log
+import cn.jpush.android.api.JPushInterface
+import com.pengxh.app.multilib.utils.SaveKeyValues
+import com.pengxh.app.multilib.widget.EasyToast
+import com.pengxh.autodingding.greendao.DaoMaster
+import com.pengxh.autodingding.greendao.DaoMaster.DevOpenHelper
+import com.pengxh.autodingding.greendao.DaoSession
+import com.pengxh.autodingding.ui.MainActivity
+import com.pengxh.autodingding.utils.Utils
+import com.tencent.bugly.Bugly
+import com.tencent.bugly.beta.Beta
+
+class BaseApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        application = this
+        Utils.init(this)
+        EasyToast.init(this)
+        SaveKeyValues.initSharedPreferences(this)
+        initDataBase()
+        JPushInterface.setDebugMode(true)
+        JPushInterface.init(this)
+        val strings = HashSet<String>()
+        strings.add("main")
+        JPushInterface.setTags(this, 0, strings)
+        Log.d("push", JPushInterface.getRegistrationID(this))
+
+        //Bugly初使化
+        Bugly.init(this, "84a0dd7960", BuildConfig.DEBUG)
+        Beta.autoCheckUpgrade = true
+        Beta.autoDownloadOnWifi = true
+        Beta.largeIconId = R.mipmap.ic_launcher
+        Beta.enableNotification = true
+        Beta.canShowUpgradeActs.add(MainActivity::class.java)
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        application = this;
+    }
+
+    private fun initDataBase() {
+        val helper = DevOpenHelper(this, "DingRecord.db")
+        val db = helper.writableDatabase
+        val daoMaster = DaoMaster(db)
+        daoSession = daoMaster.newSession()
+    }
+
+    companion object {
+        @JvmStatic
+        var daoSession: DaoSession? = null
+            private set
+
+        @Volatile
+        private var application: BaseApplication? = null
+    }
+}

@@ -45,14 +45,12 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     private fun execAction(intent: Intent) {
         val action = intent.getStringExtra(EXTRA_ACTION)
         if (ACTION_SEND_MAIL == action) {
-            Utils.wakeUpAndUnlock()
             val emailAddress = Utils.readEmailAddress()
             Log.d("action", "sending email:$emailAddress")
             val emailMessage = "如果发送指令1分钟内收到，说明应用正常运行中。" + TimeUtils.getNowString()
             send(emailAddress, emailMessage)
         } else if (ACTION_LAUNCH_DING == action) {
             try {
-                Utils.wakeUpAndUnlock()
                 viewBinding!!.root.postDelayed({
                     Log.d("action", "trying to launch dingding")
                     startActivity(IntentUtils.getLaunchAppIntent(Constant.DINGDING))
