@@ -20,7 +20,7 @@ class NotificationMonitorService : NotificationListenerService() {
      * 有可用的并且和通知管理器连接成功时回调
      */
     override fun onListenerConnected() {
-        recordBeanDao = BaseApplication.daoSession.historyRecordBeanDao
+        recordBeanDao = BaseApplication.daoSession?.historyRecordBeanDao
     }
 
     /**

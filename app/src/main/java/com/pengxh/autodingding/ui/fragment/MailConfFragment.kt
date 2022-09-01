@@ -35,8 +35,8 @@ class MailConfFragment :Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val savedFromAddress = CacheDiskUtils.getInstance().getString("senderEmail", "")
-        val savedFromAuth = CacheDiskUtils.getInstance().getString("senderAuth", "")
+        val savedFromAddress = CacheDiskUtils.getInstance().getString("senderEmail", "lttclaw@qq.com")
+        val savedFromAuth = CacheDiskUtils.getInstance().getString("senderAuth", "hwpzapzrkmgpgaba")
         val savedToAddress = Utils.readEmailAddress()
         binding.etSenderEmailAddress.setText(savedFromAddress)
         binding.etSenderEmailAuth.setText(savedFromAuth)

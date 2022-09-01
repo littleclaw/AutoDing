@@ -6,13 +6,13 @@
         android:id="@+id/nav_clock"
         android:enabled="true"
         android:icon="@mipmap/day_gray"
-        android:title="自动打卡"
+        android:title="定时启动"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/nav_settings"
         android:enabled="true"
         android:icon="@mipmap/settings_gray"
-        android:title="其他设置"
+        android:title="设置"
         app:showAsAction="ifRoom" />
 </menu>

@@ -41,7 +41,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <TextView
+        android:id="@+id/tvSenderEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="发件QQ邮箱地址，如123456@qq.com"
+        app:layout_constraintTop_toBottomOf="@id/clHeader"/>
     <EditText
         android:id="@+id/etSenderEmailAddress"
         android:layout_width="match_parent"
@@ -51,7 +58,15 @@
         android:hint="发件QQ邮箱地址，如123456@qq.com"
         android:inputType="textEmailAddress"
         style="@style/Widget.AppCompat.EditText"
-        app:layout_constraintTop_toBottomOf="@id/clHeader"/>
+        app:layout_constraintTop_toBottomOf="@id/tvSenderEmail"/>
+    <TextView
+        android:id="@+id/tvSenderAuth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="发件QQ邮箱授权码，在qq邮箱设置里获取"
+        app:layout_constraintTop_toBottomOf="@id/etSenderEmailAddress"/>
     <EditText
         android:id="@+id/etSenderEmailAuth"
         android:layout_width="match_parent"
@@ -59,8 +74,18 @@
         android:maxLines="1"
         android:layout_marginTop="8dp"
         android:hint="发件QQ邮箱授权码，在qq邮箱设置里获取"
+        android:inputType="textPassword"
         style="@style/Widget.AppCompat.EditText"
-        app:layout_constraintTop_toBottomOf="@id/etSenderEmailAddress"/>
+        app:layout_constraintTop_toBottomOf="@id/tvSenderAuth"
+        tools:ignore="TextFields" />
+    <TextView
+        android:id="@+id/tvReceiverEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="收件QQ邮箱地址，可以与发件邮箱相同"
+        app:layout_constraintTop_toBottomOf="@id/etSenderEmailAuth"/>
     <EditText
         android:id="@+id/etReceiverEmailAddress"
         android:layout_width="match_parent"
@@ -70,7 +95,7 @@
         android:hint="收件QQ邮箱地址，可以与发件邮箱相同"
         android:inputType="textEmailAddress"
         style="@style/Widget.AppCompat.EditText"
-        app:layout_constraintTop_toBottomOf="@id/etSenderEmailAuth"/>
+        app:layout_constraintTop_toBottomOf="@id/tvReceiverEmail"/>
 
     <Button
         android:id="@+id/btnCheck"
@@ -90,4 +115,9 @@
         app:layout_constraintTop_toBottomOf="@id/btnCheck"
         android:backgroundTint="@android:color/holo_blue_bright"
         android:text="保存邮箱配置"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btnSave"
+        android:text="@string/mail_setting_tip"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

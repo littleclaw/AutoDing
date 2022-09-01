@@ -127,7 +127,7 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation "com.blankj:utilcodex:1.30.5"
     implementation 'cn.jiguang.sdk:jcore:2.7.2'  // 此处以JCore 2.7.2 版本为例。
-    implementation 'cn.jiguang.sdk:jpush:4.0.0'  // 此处以JPush 4.0.0 版本为例
+    implementation 'cn.jiguang.sdk:jpush:4.8.1'  // 此处以JPush 4.0.0 版本为例
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     // 接入华为厂商
     implementation 'com.huawei.hms:push:6.3.0.304'
