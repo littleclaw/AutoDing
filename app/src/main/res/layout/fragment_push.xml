@@ -59,15 +59,33 @@
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/etTargetRegId"
-        android:backgroundTint="@color/iOSGreen"
-        android:text="推送检查指令"/>
+        android:backgroundTint="@color/sky"
+        android:text="推送检查指令(会点亮屏幕)"/>
+    <Button
+        android:id="@+id/btnStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/btnCheck"
+        android:backgroundTint="@color/cyan"
+        android:text="推送获取手机电量状态指令(不会亮屏)"/>
+    <Button
+        android:id="@+id/btnScreenShot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/btnStatus"
+        android:backgroundTint="@color/orange"
+        android:text="推送截屏指令(会亮屏)"/>
     <Button
         android:id="@+id/btnPush"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        app:layout_constraintTop_toBottomOf="@id/btnCheck"
+        app:layout_constraintTop_toBottomOf="@id/btnScreenShot"
         android:backgroundTint="@color/iOSGreen"
         android:text="推送打开钉钉指令"/>
 

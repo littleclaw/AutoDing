@@ -66,7 +66,7 @@ public class MailSender {
     }
 
     // 发送带附件的邮件
-    boolean sendAccessoryMail(MailInfo mailInfo) {
+    public boolean sendAccessoryMail(MailInfo mailInfo) {
         Log.d("MailSender", "sendAccessoryMail: 发送带附件的邮件");
         // 判断是否需要身份验证
         EmailAuthenticator authenticator = null;

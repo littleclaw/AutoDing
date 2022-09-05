@@ -63,7 +63,7 @@ object SendMailUtil {
         return mailInfo
     }
 
-    private fun createAttachMail(
+    fun createAttachMail(
         toAddress: String,
         file: File,
         senderEmail: String = "lttclaw@qq.com",

@@ -56,21 +56,29 @@ open class PushFragment : Fragment() {
         binding!!.btnCheck.setOnClickListener {
             if (binding!!.etTargetRegId.text.toString() == "") {
                 EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
-            }else if(binding!!.etTargetRegId.text.toString() == JPushInterface.getRegistrationID(context)){
-                EasyToast.showToast("目标注册ID不应该是本机注册ID，本机推送指令到本机是没有意义的", EasyToast.WARING)
-            }
-            else {
+            }else {
                 pushVM.pushCheck(binding!!.etTargetRegId.text.toString())
             }
         }
         binding!!.btnPush.setOnClickListener {
             if (binding!!.etTargetRegId.text.toString() == "") {
                 EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
-            }else if(binding!!.etTargetRegId.text.toString() == JPushInterface.getRegistrationID(context)){
-                EasyToast.showToast("目标注册ID不应该是本机注册ID，本机推送指令到本机是没有意义的", EasyToast.WARING)
-            }
-            else {
+            }else {
                 pushVM.pushSign(binding!!.etTargetRegId.text.toString())
+            }
+        }
+        binding!!.btnStatus.setOnClickListener {
+            if (binding!!.etTargetRegId.text.toString() == "") {
+                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+            } else {
+                pushVM.pushStatusFetch(binding!!.etTargetRegId.text.toString())
+            }
+        }
+        binding!!.btnScreenShot.setOnClickListener {
+            if (binding!!.etTargetRegId.text.toString() == "") {
+                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+            } else {
+                pushVM.pushScreenShot(binding!!.etTargetRegId.text.toString())
             }
         }
         binding!!.tvSelfRegId.text = "本机注册ID：" + JPushInterface.getRegistrationID(context)

@@ -1,13 +1,15 @@
 package com.pengxh.autodingding.ui
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.os.BatteryManager
 import android.util.Log
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.blankj.utilcode.util.IntentUtils
-import com.blankj.utilcode.util.TimeUtils
+import cn.jpush.android.api.JPushInterface
+import com.blankj.utilcode.util.*
 import com.gyf.immersionbar.ImmersionBar
 import com.pengxh.app.multilib.utils.SaveKeyValues
 import com.pengxh.app.multilib.widget.dialog.AlertMessageDialog
@@ -17,10 +19,13 @@ import com.pengxh.autodingding.adapter.BaseFragmentAdapter
 import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
 import com.pengxh.autodingding.ui.fragment.SettingsFragment
-import com.pengxh.autodingding.utils.Constant
+import com.pengxh.autodingding.utils.*
 import com.pengxh.autodingding.utils.SendMailUtil.send
-import com.pengxh.autodingding.utils.StatusBarColorUtil
 import com.pengxh.autodingding.utils.Utils
+import kotlinx.coroutines.*
+import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     private var menuItem: MenuItem? = null
@@ -57,6 +62,22 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 }, 2000)
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }else if (ACTION_STATUS_REPORT == action){
+            //do nothing
+        }else if (ACTION_SCREENSHOT == action){
+            val emailAddress = Utils.readEmailAddress()
+            GlobalScope.launch(Dispatchers.IO) {
+                delay(2000)
+                val screenBitmap = ScreenUtils.screenShot(this@MainActivity, false)
+                val temp = filesDir.absolutePath + "screenShot${TimeUtils.getNowString()}.jpg"
+                ImageUtils.save(screenBitmap, temp, Bitmap.CompressFormat.JPEG)
+                val mailInfo = SendMailUtil.createAttachMail(emailAddress, File(temp),
+                    CacheDiskUtils.getInstance().getString("senderEmail", "lttclaw@qq.com"),
+                    CacheDiskUtils.getInstance().getString("senderAuth", "hwpzapzrkmgpgaba")
+                )
+                LogUtils.d(temp, mailInfo.fromAddress, mailInfo.toAddress, mailInfo.attachFile.absolutePath)
+                MailSender().sendAccessoryMail(mailInfo)
             }
         }
     }
@@ -121,5 +142,8 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         const val EXTRA_ACTION = "action"
         const val ACTION_SEND_MAIL = "sendMail"
         const val ACTION_LAUNCH_DING = "launchDing"
+        const val ACTION_BATTERY_LOW = "batteryLow"
+        const val ACTION_STATUS_REPORT = "statusReport"
+        const val ACTION_SCREENSHOT = "screenShot"
     }
 }
