@@ -18,4 +18,7 @@
         发件箱中看到，而且如果使用我的邮箱发件人数太多，我会考虑更换邮箱授权码，界时用此授权码的发邮件功能将无法正常工作。
         因此，为了您的隐私考虑，请您最好去自己的qq邮箱设置里打开smtp服务获取自己的邮箱授权码在此配置
     </string>
+    <string name="base_ser_desc">基础辅助服务</string>
+    <string name="ges_ser_desc">手势服务</string>
+    <string name="fore_service">前台服务</string>
 </resources>

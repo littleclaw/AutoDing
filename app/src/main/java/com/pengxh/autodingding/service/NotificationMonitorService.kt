@@ -45,7 +45,6 @@ class NotificationMonitorService : NotificationListenerService() {
                 recordBeanDao!!.save(bean)
                 //通知发送邮件和更新界面
                 sendEvent(notificationText)
-                SettingsFragment.sendEmptyMessage()
             }
         }
     }
@@ -59,9 +58,5 @@ class NotificationMonitorService : NotificationListenerService() {
             // 通知侦听器断开连接 - 请求重新绑定
             requestRebind(ComponentName(this, NotificationListenerService::class.java))
         }
-    }
-
-    companion object {
-        private const val TAG = "MonitorService"
     }
 }

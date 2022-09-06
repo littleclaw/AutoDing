@@ -63,8 +63,6 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }else if (ACTION_STATUS_REPORT == action){
-            //do nothing
         }else if (ACTION_SCREENSHOT == action){
             val emailAddress = Utils.readEmailAddress()
             GlobalScope.launch(Dispatchers.IO) {

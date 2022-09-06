@@ -151,6 +151,34 @@
         android:background="#CCC" />
 
     <RelativeLayout
+        android:id="@+id/testLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="实验功能"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="72px"
+            android:layout_height="72px"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/right" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#CCC" />
+
+    <RelativeLayout
         android:id="@+id/rlVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

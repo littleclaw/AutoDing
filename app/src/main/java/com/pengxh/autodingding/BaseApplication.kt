@@ -4,11 +4,15 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import cn.jpush.android.api.JPushInterface
+import cn.vove7.andro_accessibility_api.AccessibilityApi
+import cn.vove7.andro_accessibility_api.AccessibilityApi.Companion.GESTURE_SERVICE_CLS
 import com.pengxh.app.multilib.utils.SaveKeyValues
 import com.pengxh.app.multilib.widget.EasyToast
 import com.pengxh.autodingding.greendao.DaoMaster
 import com.pengxh.autodingding.greendao.DaoMaster.DevOpenHelper
 import com.pengxh.autodingding.greendao.DaoSession
+import com.pengxh.autodingding.service.BaseAccessibilityService
+import com.pengxh.autodingding.service.GestureService
 import com.pengxh.autodingding.ui.MainActivity
 import com.pengxh.autodingding.utils.Utils
 import com.tencent.bugly.Bugly
@@ -36,6 +40,12 @@ class BaseApplication : Application() {
         Beta.largeIconId = R.mipmap.ic_launcher
         Beta.enableNotification = true
         Beta.canShowUpgradeActs.add(MainActivity::class.java)
+
+        //辅助服务
+        AccessibilityApi.apply {
+            BASE_SERVICE_CLS = BaseAccessibilityService::class.java
+            GESTURE_SERVICE_CLS = GestureService::class.java
+        }
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -56,6 +66,6 @@ class BaseApplication : Application() {
             private set
 
         @Volatile
-        private var application: BaseApplication? = null
+        var application: BaseApplication? = null
     }
 }
