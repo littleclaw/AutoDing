@@ -86,11 +86,11 @@
         android:layout_marginTop="8dp"
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         app:layout_constraintTop_toBottomOf="@id/btnScreenShot"
-        android:backgroundTint="@color/iOSGreen"
+        android:backgroundTint="@color/weChatGreen"
         android:text="推送打开钉钉指令"/>
 
     <TextView
-        android:id="@+id/tvSelfRegId"
+        android:id="@+id/tvTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/btnPush"
@@ -99,16 +99,14 @@
         android:textColor="@color/black"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="本机注册id:"/>
+        android:text="测试功能:"/>
     <Button
-        android:id="@+id/btnCopyRegId"
+        android:id="@+id/btnManualSign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        android:textColor="@color/white"
-        android:text="复制本机注册id"
-        android:backgroundTint="@color/orange"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSelfRegId"
-        />
+        app:layout_constraintTop_toBottomOf="@id/tvTest"
+        android:backgroundTint="@color/red"
+        android:text="推送辅助手动打卡指令(测试功能)"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

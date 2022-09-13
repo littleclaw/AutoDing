@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.ClipboardUtils
 import com.pengxh.app.multilib.widget.EasyToast
 import com.pengxh.autodingding.databinding.FragmentPushBinding
+import com.pengxh.autodingding.utils.clickNoRepeat
 
 open class PushFragment : Fragment() {
     private var fragmentProvider: ViewModelProvider? = null
@@ -81,11 +82,14 @@ open class PushFragment : Fragment() {
                 pushVM.pushScreenShot(binding!!.etTargetRegId.text.toString())
             }
         }
-        binding!!.tvSelfRegId.text = "本机注册ID：" + JPushInterface.getRegistrationID(context)
-        binding!!.btnCopyRegId.setOnClickListener {
-            ClipboardUtils.copyText(JPushInterface.getRegistrationID(context))
-            EasyToast.showToast("已复制到剪贴板", EasyToast.DEFAULT)
+        binding!!.btnManualSign.clickNoRepeat(1000) {
+            if (binding!!.etTargetRegId.text.toString() == "") {
+                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+            } else {
+                pushVM.pushManualSign(binding!!.etTargetRegId.text.toString())
+            }
         }
+
     }
 
     private fun <T : ViewModel?> getFragmentViewModel(modelClass: Class<T>): T {

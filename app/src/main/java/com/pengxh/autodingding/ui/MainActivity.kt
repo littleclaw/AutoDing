@@ -15,11 +15,13 @@ import com.pengxh.app.multilib.utils.SaveKeyValues
 import com.pengxh.app.multilib.widget.dialog.AlertMessageDialog
 import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.R
+import com.pengxh.autodingding.actions.DingSignAction
 import com.pengxh.autodingding.adapter.BaseFragmentAdapter
 import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
 import com.pengxh.autodingding.ui.fragment.SettingsFragment
 import com.pengxh.autodingding.utils.*
+import com.pengxh.autodingding.utils.SendMailUtil.createMail
 import com.pengxh.autodingding.utils.SendMailUtil.send
 import com.pengxh.autodingding.utils.Utils
 import kotlinx.coroutines.*
@@ -29,6 +31,7 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     private var menuItem: MenuItem? = null
+    private var actionJob: Job? = null
     private val fragmentList: MutableList<Fragment> = ArrayList()
     override fun setupTopBarLayout() {
         StatusBarColorUtil.setColor(this, ContextCompat.getColor(this, R.color.colorAppThemeLight))
@@ -76,6 +79,21 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 )
                 LogUtils.d(temp, mailInfo.fromAddress, mailInfo.toAddress, mailInfo.attachFile.absolutePath)
                 MailSender().sendAccessoryMail(mailInfo)
+            }
+        }else if (ACTION_MANUAL_SIGN == action){
+            val dingAction = DingSignAction()
+            if (actionJob?.isCompleted.let { it != null && !it }) {
+                toast("有正在运行的任务")
+                return
+            }
+            actionJob = launchWithExpHandler {
+                dingAction.run(this@MainActivity)
+                val emailAddress = Utils.readEmailAddress()
+                val emailMessage = "执行结果："+ if(dingAction.result) "成功" else "失败" + TimeUtils.getNowString()
+                MailSender().sendTextMail(createMail(emailAddress, emailMessage))
+            }
+            actionJob?.invokeOnCompletion {
+                toast("执行结束")
             }
         }
     }
@@ -143,5 +161,6 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         const val ACTION_BATTERY_LOW = "batteryLow"
         const val ACTION_STATUS_REPORT = "statusReport"
         const val ACTION_SCREENSHOT = "screenShot"
+        const val ACTION_MANUAL_SIGN = "manualSign"
     }
 }

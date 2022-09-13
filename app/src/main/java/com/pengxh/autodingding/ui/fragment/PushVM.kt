@@ -1,7 +1,6 @@
 package com.pengxh.autodingding.ui.fragment
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.pengxh.autodingding.BaseViewModel
 import com.pengxh.autodingding.MyPushReceiver
 import com.pengxh.autodingding.bean.BodyMsg
@@ -11,17 +10,16 @@ import com.pengxh.autodingding.bean.PushResp
 import com.pengxh.autodingding.net.RetrofitManager
 import com.pengxh.autodingding.net.api.PushApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PushVM: BaseViewModel() {
     val pushResult = MutableLiveData<PushResp>()
 
-    fun pushCheck(regId:String) = launch {
+    fun pushCheck(regId:String) {
         pushCmd(regId, MyPushReceiver.MSG_MAIL_CHECK)
     }
 
-    fun pushSign(regId:String) = launch {
+    fun pushSign(regId:String) {
         pushCmd(regId, MyPushReceiver.MSG_SIGN)
     }
 
@@ -31,6 +29,10 @@ class PushVM: BaseViewModel() {
 
     fun pushScreenShot(regId: String){
         pushCmd(regId, MyPushReceiver.MSG_SCREEN_SHOT)
+    }
+
+    fun pushManualSign(regId: String){
+        pushCmd(regId, MyPushReceiver.MSG_MANUAL_SIGN)
     }
 
     private fun pushCmd(regId: String, cmd: String) = launch {

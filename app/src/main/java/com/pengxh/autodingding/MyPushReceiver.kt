@@ -1,17 +1,12 @@
 package com.pengxh.autodingding
 
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.BatteryManager
-import android.os.PowerManager
 import android.util.Log
 import cn.jpush.android.api.CustomMessage
 import cn.jpush.android.api.JPushInterface
 import cn.jpush.android.service.JPushMessageReceiver
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ProcessUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.pengxh.autodingding.ui.MainActivity
 import com.pengxh.autodingding.utils.SendMailUtil
@@ -49,6 +44,10 @@ class MyPushReceiver : JPushMessageReceiver() {
             if (ifLock.not()){
                 //TODO turn off screen
             }
+        } else if (MSG_MANUAL_SIGN == customMessage.message){
+            Utils.wakeUpAndUnlock()
+            intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_MANUAL_SIGN)
+            context.startActivity(intent)
         }
         super.onMessage(context, customMessage)
     }
@@ -60,5 +59,6 @@ class MyPushReceiver : JPushMessageReceiver() {
         const val MSG_STATUS_REPORT = "statusReport"
         const val MSG_SCREEN_SHOT = "screenShot"
         const val MSG_SLEEP = "goToSleep"
+        const val MSG_MANUAL_SIGN = "manualSign"
     }
 }

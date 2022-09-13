@@ -11,6 +11,7 @@ import com.pengxh.autodingding.utils.toast
 import kotlinx.coroutines.delay
 
 class DingSignAction: Action() {
+    var result = false
     override val name: String
         get() = "打开钉钉，手动打卡"
 
@@ -45,12 +46,16 @@ class DingSignAction: Action() {
             val signButton = SF.containsText("下班打卡")
                 .or(SF.containsText("上班打卡"))
                 .findFirst(false)
-            val ifSucceed:Boolean = signButton?.tryClick()?:false
-            toast("手动打卡 "+ if (ifSucceed) "成功" else "失败")
+            val clickSucceed:Boolean = signButton?.tryClick()?:false
+            delay(5000)
+            val succeed = SF.containsText("成功")
+                .findFirst(false) != null
+            toast("手动打卡 "+ if (succeed) "成功" else "失败")
             delay(2000)
             back()
             delay(2000)
             back()
+            result = clickSucceed && succeed
         }
     }
 }
