@@ -1,13 +1,11 @@
 package com.pengxh.autodingding.actions
 
 import android.app.Activity
-import android.util.Log
-import cn.vove7.andro_accessibility_api.api.findAllWith
+import cn.vove7.andro_accessibility_api.api.back
 import cn.vove7.andro_accessibility_api.api.waitBaseAccessibility
 import cn.vove7.andro_accessibility_api.api.waitForApp
 import cn.vove7.andro_accessibility_api.viewfinder.SF
 import cn.vove7.andro_accessibility_api.viewfinder.containsText
-import com.blankj.utilcode.util.LogUtils
 import com.pengxh.autodingding.utils.Constant
 import com.pengxh.autodingding.utils.toast
 import kotlinx.coroutines.delay
@@ -19,20 +17,20 @@ class DingSignAction: Action() {
     override suspend fun run(act: Activity) {
         waitBaseAccessibility()
 
-        toast("start ding after 1s")
+        toast("1秒后启动钉钉")
         delay(1000)
         val targetApp = Constant.DINGDING
         act.startActivity(act.packageManager.getLaunchIntentForPackage(targetApp))
 
         if (
             waitForApp(targetApp, 5000).also {
-                toast("wait " + if (it) "success" else "failed")
+                toast("等待启动 " + if (it) "成功" else "失败")
             }
         ){
             delay(2000)
             val messageTab = SF.containsText("消息").findFirst(false)
 
-            toast("找到${messageTab!=null}消息")
+            toast(if (messageTab!=null) "找到消息按钮" else "未找到消息按钮")
             if (messageTab != null){
                 messageTab.tryClick()
                 delay(2000)
@@ -41,12 +39,18 @@ class DingSignAction: Action() {
             toast("找到${signTab!= null}打卡")
             if(signTab != null){
                 signTab.tryClick()
-                delay(2000)
+                toast("8秒后尝试寻找打卡按钮")
+                delay(8000)
             }
             val signButton = SF.containsText("下班打卡")
                 .or(SF.containsText("上班打卡"))
                 .findFirst(false)
-            signButton?.tryClick()
+            val ifSucceed:Boolean = signButton?.tryClick()?:false
+            toast("手动打卡 "+ if (ifSucceed) "成功" else "失败")
+            delay(2000)
+            back()
+            delay(2000)
+            back()
         }
     }
 }

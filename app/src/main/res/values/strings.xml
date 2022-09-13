@@ -11,14 +11,14 @@
         4、将钉钉软件上下班都设置为“极速打卡”。\n
         5、设置好自己的收信邮箱，跳转到“钉钉”打卡成功后会发送一封打卡成功的邮件到你自己设置好的邮箱。\n
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="hello_blank_fragment">空白页</string>
     <string name="mail_setting_tip">
         请注意，如果您使用应用内自带的发件邮箱配置，即开发者本人的个人qq邮箱来发送打卡通知，您的这些邮件都会被本人在qq邮箱的
         发件箱中看到，而且如果使用我的邮箱发件人数太多，我会考虑更换邮箱授权码，界时用此授权码的发邮件功能将无法正常工作。
         因此，为了您的隐私考虑，请您最好去自己的qq邮箱设置里打开smtp服务获取自己的邮箱授权码在此配置
     </string>
-    <string name="base_ser_desc">基础辅助服务</string>
-    <string name="ges_ser_desc">手势服务</string>
+    <string name="base_ser_desc">远程启钉基础辅助服务</string>
+    <string name="ges_ser_desc">远程启钉手势服务</string>
     <string name="fore_service">前台服务</string>
 </resources>

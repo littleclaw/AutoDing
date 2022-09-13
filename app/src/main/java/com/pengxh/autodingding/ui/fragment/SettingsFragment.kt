@@ -25,6 +25,7 @@ import com.pengxh.autodingding.utils.Utils
 import com.pengxh.autodingding.utils.launchWithExpHandler
 import com.pengxh.autodingding.utils.toast
 import com.tencent.bugly.beta.Beta
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Job
 
 class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.OnClickListener {
@@ -68,7 +69,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
         } else {
             startNotificationMonitorService()
         }
-        viewBinding!!.tvRegValue.text = JPushInterface.getRegistrationID(getContext())
+        viewBinding!!.tvRegValue.text = JPushInterface.getRegistrationID(context)
         viewBinding!!.btnCopy.setOnClickListener(this)
         viewBinding!!.btnTestLaunchDing.setOnClickListener(this)
         viewBinding!!.emailLayout.setOnClickListener(this)
@@ -95,6 +96,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
         viewBinding!!.noticeCheckBox.isChecked = isNotificationEnable
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onClick(v: View) {
         when (v.id) {
             R.id.emailLayout -> {
