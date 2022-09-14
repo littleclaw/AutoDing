@@ -29,7 +29,9 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
         timer!!.schedule(object : TimerTask() {
             override fun run() {
                 val systemTime = TimeOrDateUtil.timestampToTime(System.currentTimeMillis())
-                viewBinding!!.currentTime.post { viewBinding!!.currentTime.text = systemTime }
+                viewBinding!!.currentTime.post {
+                    viewBinding?.currentTime?.text = systemTime
+                }
             }
         }, 0, 1000)
         viewBinding!!.startLayoutView.setOnClickListener(this)

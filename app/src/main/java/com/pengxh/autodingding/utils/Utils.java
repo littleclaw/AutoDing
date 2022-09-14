@@ -20,6 +20,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.pengxh.autodingding.R;
 
 import java.io.BufferedReader;
@@ -138,21 +139,30 @@ public class Utils {
     /**
      * 唤醒屏幕并解锁
      */
-    @SuppressLint("InvalidWakeLockTag")
     public static void wakeUpAndUnlock() {
         Log.d(TAG, "wakeUpAndUnlock: 亮屏解锁");
         PowerManager powerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         boolean screenOn = powerManager.isInteractive();
         if (!screenOn) {
             //唤醒屏幕
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
+                    | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "autoDing:bright");
             wakeLock.acquire(10000);
             wakeLock.release();
         }
         //解锁屏幕
         KeyguardManager keyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("unLock");
-        keyguardLock.disableKeyguard();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            keyguardManager.requestDismissKeyguard(ActivityUtils.getTopActivity(), new KeyguardManager.KeyguardDismissCallback() {
+                @Override
+                public void onDismissError() {
+                    super.onDismissError();
+                }
+            });
+        }else {
+            KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("unLock");
+            keyguardLock.disableKeyguard();
+        }
     }
 
     /**

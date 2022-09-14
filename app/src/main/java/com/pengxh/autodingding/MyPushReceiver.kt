@@ -1,12 +1,16 @@
 package com.pengxh.autodingding
 
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.BatteryManager
+import android.os.Build
+import android.os.PowerManager
 import android.util.Log
 import cn.jpush.android.api.CustomMessage
 import cn.jpush.android.api.JPushInterface
 import cn.jpush.android.service.JPushMessageReceiver
+import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.pengxh.autodingding.ui.MainActivity
 import com.pengxh.autodingding.utils.SendMailUtil
@@ -18,11 +22,13 @@ class MyPushReceiver : JPushMessageReceiver() {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (MSG_MAIL_CHECK == customMessage.message) {
-            Utils.wakeUpAndUnlock()
+            wakePhone(context)
+            unlockPhone(context)
             intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_SEND_MAIL)
             context.startActivity(intent)
         } else if (MSG_SIGN == customMessage.message) {
-            Utils.wakeUpAndUnlock()
+            wakePhone(context)
+            unlockPhone(context)
             intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_LAUNCH_DING)
             context.startActivity(intent)
         } else if (MSG_STATUS_REPORT == customMessage.message){
@@ -36,7 +42,8 @@ class MyPushReceiver : JPushMessageReceiver() {
                     "当前充电：$charging 当前电量百分比：$curBattery %"
             SendMailUtil.send(emailAddress, message)
         } else if (MSG_SCREEN_SHOT == customMessage.message){
-            Utils.wakeUpAndUnlock()
+            wakePhone(context)
+            unlockPhone(context)
             intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_SCREENSHOT)
             context.startActivity(intent)
         } else if (MSG_SLEEP == customMessage.message){
@@ -45,11 +52,41 @@ class MyPushReceiver : JPushMessageReceiver() {
                 //TODO turn off screen
             }
         } else if (MSG_MANUAL_SIGN == customMessage.message){
-            Utils.wakeUpAndUnlock()
+            wakePhone(context)
+            unlockPhone(context)
             intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_MANUAL_SIGN)
             context.startActivity(intent)
         }
         super.onMessage(context, customMessage)
+    }
+
+    private fun wakePhone(context: Context){
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val screenOn = powerManager.isInteractive
+        if (!screenOn) {
+            //唤醒屏幕
+            val wakeLock = powerManager.newWakeLock(
+                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+                "autoDing:bright"
+            )
+            wakeLock.acquire(10000)
+            wakeLock.release()
+        }
+    }
+
+    private fun unlockPhone(context: Context){
+        val keyGuardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (keyGuardManager.isKeyguardLocked){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                keyGuardManager.requestDismissKeyguard(ActivityUtils.getTopActivity(), object : KeyguardManager.KeyguardDismissCallback(){
+                    override fun onDismissSucceeded() {
+                        Log.d("unlock", "success")
+                    }
+                })
+            }else{
+                keyGuardManager.newKeyguardLock("dismiss").disableKeyguard()
+            }
+        }
     }
 
     companion object {
