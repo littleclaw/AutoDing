@@ -78,6 +78,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
         viewBinding!!.pushLayout.setOnClickListener(this)
         viewBinding!!.testLayout.setOnClickListener(this)
         viewBinding!!.rlVersion.setOnClickListener(this)
+        viewBinding!!.permissionLayout.setOnClickListener(this)
     }
 
     //切换通知监听器服务
@@ -152,6 +153,12 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
                 actionJob?.invokeOnCompletion {
                     toast("执行结束")
                 }
+            }
+            R.id.permissionLayout -> {
+                parentFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, PermissionFragment())
+                    .commit()
             }
         }
     }

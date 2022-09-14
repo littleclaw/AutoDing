@@ -1,9 +1,11 @@
-package com.pengxh.autodingding
+package com.pengxh.autodingding.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.LogUtils
+import com.pengxh.autodingding.ApiException
+import com.pengxh.autodingding.BuildConfig
 import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.*
 import org.json.JSONException

@@ -1,6 +1,7 @@
 package com.pengxh.autodingding.ui.fragment
 
-import com.pengxh.autodingding.BaseViewModel
+
+import com.pengxh.autodingding.base.BaseViewModel
 import com.pengxh.autodingding.utils.MailSender
 import com.pengxh.autodingding.utils.SendMailUtil
 import kotlinx.coroutines.Dispatchers

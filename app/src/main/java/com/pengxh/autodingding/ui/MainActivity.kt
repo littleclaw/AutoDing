@@ -21,6 +21,7 @@ import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
 import com.pengxh.autodingding.ui.fragment.SettingsFragment
 import com.pengxh.autodingding.utils.*
+import com.pengxh.autodingding.utils.RomUtils
 import com.pengxh.autodingding.utils.SendMailUtil.createMail
 import com.pengxh.autodingding.utils.SendMailUtil.send
 import com.pengxh.autodingding.utils.Utils
@@ -152,6 +153,16 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                     .build().show()
             }
         }
+        if (!RomUtils.isBackgroundStartAllowed(this)){
+            AlertMessageDialog.Builder()
+                .setContext(this)
+                .setTitle("必要授权需要")
+                .setMessage("未获得后台弹出界面权限，需要手动授权，否则无法远程唤醒手机")
+                .setPositiveButton("去授权")
+                .setOnDialogButtonClickListener {
+                    startActivity(IntentUtils.getLaunchAppDetailsSettingsIntent(this.packageName))
+                }.build().show()
+        }
     }
 
     companion object {
@@ -159,7 +170,6 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         const val ACTION_SEND_MAIL = "sendMail"
         const val ACTION_LAUNCH_DING = "launchDing"
         const val ACTION_BATTERY_LOW = "batteryLow"
-        const val ACTION_STATUS_REPORT = "statusReport"
         const val ACTION_SCREENSHOT = "screenShot"
         const val ACTION_MANUAL_SIGN = "manualSign"
     }

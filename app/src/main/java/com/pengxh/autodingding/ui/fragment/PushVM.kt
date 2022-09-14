@@ -1,8 +1,8 @@
 package com.pengxh.autodingding.ui.fragment
 
 import androidx.lifecycle.MutableLiveData
-import com.pengxh.autodingding.BaseViewModel
 import com.pengxh.autodingding.MyPushReceiver
+import com.pengxh.autodingding.base.BaseViewModel
 import com.pengxh.autodingding.bean.BodyMsg
 import com.pengxh.autodingding.bean.PushAudience
 import com.pengxh.autodingding.bean.PushMessage
