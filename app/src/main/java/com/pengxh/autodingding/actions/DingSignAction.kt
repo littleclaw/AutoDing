@@ -2,6 +2,7 @@ package com.pengxh.autodingding.actions
 
 import android.app.Activity
 import cn.vove7.andro_accessibility_api.api.back
+import cn.vove7.andro_accessibility_api.api.requireBaseAccessibility
 import cn.vove7.andro_accessibility_api.api.waitBaseAccessibility
 import cn.vove7.andro_accessibility_api.api.waitForApp
 import cn.vove7.andro_accessibility_api.viewfinder.SF
@@ -16,7 +17,7 @@ class DingSignAction: Action() {
         get() = "打开钉钉，手动打卡"
 
     override suspend fun run(act: Activity) {
-        waitBaseAccessibility()
+        requireBaseAccessibility(true)
 
         toast("1秒后启动钉钉")
         delay(1000)
