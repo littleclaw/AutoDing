@@ -20,9 +20,8 @@ class BatteryLevelReceiver : BroadcastReceiver() {
             val curBattery = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)///当前电量百分比
             val regId = JPushInterface.getRegistrationID(context)
             val screenLock = ScreenUtils.isScreenLock()
-            val foregroundPkgName = ProcessUtils.getForegroundProcessName()
-            val message = "警告！低电量！注册ID: $regId 是否锁屏：$screenLock 前台应用： $foregroundPkgName " +
-                    "当前电流：$curBatteryCurrent mA(正为充电大于放电，负为反之) 当前电量百分比：$curBattery %"
+            val message = "警告！低电量！注册ID: $regId 是否锁屏：$screenLock " +
+                    "当前电流：$curBatteryCurrent mA  当前电量百分比：$curBattery %"
             SendMailUtil.send(emailAddress, message)
         }
     }

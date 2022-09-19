@@ -92,14 +92,14 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 return
             }else if (AccessibilityUtil.isServiceOn(this,
                     BaseAccessibilityService::class.java.canonicalName?:""
-                )){
+                ).not()){
                 toast("未开启相应的辅助服务")
                 return
             }
             actionJob = launchWithExpHandler {
                 dingAction.run(this@MainActivity)
                 val emailAddress = Utils.readEmailAddress()
-                val emailMessage = "执行结果："+ if(dingAction.result) "成功" else "失败" + TimeUtils.getNowString()
+                val emailMessage = dingAction.message.toString()
                 MailSender().sendTextMail(createMail(emailAddress, emailMessage))
             }
             actionJob?.invokeOnCompletion {

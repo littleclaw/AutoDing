@@ -53,7 +53,8 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
     //检测通知监听服务是否被授权
     private val isNotificationEnable: Boolean
         get() {
-            val packageNames = NotificationManagerCompat.getEnabledListenerPackages(requireContext())
+            val packageNames =
+                NotificationManagerCompat.getEnabledListenerPackages(requireContext())
             return packageNames.contains(context?.packageName)
         }
 
@@ -151,7 +152,8 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
                     activity?.let { action.run(it) }
                 }
                 actionJob?.invokeOnCompletion {
-                    toast("执行结束")
+                    Utils.showAlertDialog(activity, "执行日志", action.message.toString(),
+                        "确定", true)
                 }
             }
             R.id.permissionLayout -> {
