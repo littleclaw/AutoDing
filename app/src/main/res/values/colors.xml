@@ -11,4 +11,8 @@
     <color name="colorLine">#313131</color>
     <color name="colorAppThemeLight">#0094FF</color>
     <color name="iOSGreen">#4DDC64</color>
+    <color name="sky">#0094FF</color>
+    <color name="orange">#ffa500</color>
+    <color name="cyan">#00ffff</color>
+    <color name="weChatGreen">#32cd32</color>
 </resources>

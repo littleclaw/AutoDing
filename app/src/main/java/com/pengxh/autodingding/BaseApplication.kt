@@ -5,9 +5,7 @@ import android.content.Context
 import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import cn.vove7.andro_accessibility_api.AccessibilityApi
-import cn.vove7.andro_accessibility_api.AccessibilityApi.Companion.GESTURE_SERVICE_CLS
-import com.pengxh.app.multilib.utils.SaveKeyValues
-import com.pengxh.app.multilib.widget.EasyToast
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.greendao.DaoMaster
 import com.pengxh.autodingding.greendao.DaoMaster.DevOpenHelper
 import com.pengxh.autodingding.greendao.DaoSession
@@ -23,8 +21,6 @@ class BaseApplication : Application() {
         super.onCreate()
         application = this
         Utils.init(this)
-        EasyToast.init(this)
-        SaveKeyValues.initSharedPreferences(this)
         initDataBase()
         JPushInterface.setDebugMode(true)
         JPushInterface.init(this)

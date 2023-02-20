@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@id/btnPush"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textColor="#000"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="测试功能:"/>
@@ -107,6 +107,6 @@
         android:layout_marginTop="8dp"
         style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         app:layout_constraintTop_toBottomOf="@id/tvTest"
-        android:backgroundTint="@color/red"
+        android:backgroundTint="#F00"
         android:text="推送辅助手动打卡指令(测试功能)"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,8 +3,7 @@ package com.pengxh.autodingding.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.pengxh.app.multilib.widget.EasyToast
-import com.pengxh.autodingding.ui.MainActivity
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.utils.Constant
 import com.pengxh.autodingding.utils.mainHandler
 import pub.devrel.easypermissions.EasyPermissions
@@ -37,7 +36,7 @@ class WelcomeActivity : AppCompatActivity(), PermissionCallbacks {
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
         if (perms.size == Constant.USER_PERMISSIONS.size) { //授权全部失败，则提示用户
-            EasyToast.showToast("授权失败", EasyToast.ERROR)
+            ToastUtils.showShort("授权失败")
             mainHandler.postDelayed({ this@WelcomeActivity.finish() }, 1500)
         }
     }

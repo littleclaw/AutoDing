@@ -1,14 +1,14 @@
 package com.pengxh.autodingding.ui.fragment
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import com.blankj.utilcode.util.ToastUtils
 import com.drake.channel.receiveEvent
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
-import com.pengxh.app.multilib.utils.ColorUtil
-import com.pengxh.app.multilib.widget.EasyToast
 import com.pengxh.autodingding.AndroidxBaseFragment
 import com.pengxh.autodingding.R
 import com.pengxh.autodingding.databinding.FragmentDayBinding
@@ -60,7 +60,7 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
         val id = v.id
         if (id == R.id.startLayoutView) {
             //设置上班时间
-            TimePickerDialog.Builder().setThemeColor(ColorUtil.getRandomColor())
+            TimePickerDialog.Builder().setThemeColor(Color.BLUE)
                 .setWheelItemTextSize(15)
                 .setCyclic(false)
                 .setMinMillseconds(System.currentTimeMillis())
@@ -73,7 +73,7 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
                 }.build().show(childFragmentManager, "year_month_day_hour_minute")
         } else if (id == R.id.endLayoutView) {
             //设置下班时间
-            TimePickerDialog.Builder().setThemeColor(ColorUtil.getRandomColor())
+            TimePickerDialog.Builder().setThemeColor(Color.BLUE)
                 .setWheelItemTextSize(15)
                 .setCyclic(false)
                 .setMinMillseconds(System.currentTimeMillis())
@@ -117,7 +117,7 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
             }
             (amCountDownTimer as CountDownTimer).start()
         } else {
-            EasyToast.showToast("已有任务在进行中", EasyToast.WARING)
+            ToastUtils.showShort("已有任务在进行中")
         }
     }
 
@@ -141,7 +141,7 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
             }
             (pmCountDownTimer as CountDownTimer).start()
         } else {
-            EasyToast.showToast("已有任务在进行中", EasyToast.WARING)
+            ToastUtils.showShort("已有任务在进行中")
         }
     }
 

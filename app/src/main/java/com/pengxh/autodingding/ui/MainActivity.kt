@@ -9,14 +9,16 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2
+import cn.vove7.andro_accessibility_api.viewfinder.text
+import com.afollestad.materialdialogs.MaterialDialog
 import com.blankj.utilcode.util.*
 import com.gyf.immersionbar.ImmersionBar
-import com.pengxh.app.multilib.utils.SaveKeyValues
-import com.pengxh.app.multilib.widget.dialog.AlertMessageDialog
 import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.R
 import com.pengxh.autodingding.actions.DingSignAction
 import com.pengxh.autodingding.adapter.BaseFragmentAdapter
+import com.pengxh.autodingding.adapter.FragAdapter
 import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.service.BaseAccessibilityService
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
@@ -120,17 +122,10 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
             }
             false
         }
-        val fragmentAdapter = BaseFragmentAdapter(supportFragmentManager, fragmentList)
+        val fragmentAdapter = FragAdapter(this, fragmentList)
         viewBinding!!.mViewPager.adapter = fragmentAdapter
         viewBinding!!.mViewPager.offscreenPageLimit = fragmentList.size
-        viewBinding!!.mViewPager.addOnPageChangeListener(object : OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
+        viewBinding!!.mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 if (menuItem != null) {
                     menuItem!!.isChecked = false
@@ -140,26 +135,25 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 menuItem = viewBinding!!.bottomNavigation.menu.getItem(position)
                 menuItem!!.isChecked = true
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
         if (!Utils.isAppAvailable(Constant.DINGDING)) {
-            AlertMessageDialog.Builder()
-                .setContext(this)
-                .setTitle("温馨提醒")
-                .setMessage("手机没有安装钉钉软件，无法自动打卡")
-                .setPositiveButton("退出")
-                .setOnDialogButtonClickListener { finish() }.build().show()
+            MaterialDialog(this).show {
+                title(text = "温馨提醒")
+                message(text = "手机没有安装钉钉软件，无法自动打卡")
+                positiveButton(text = "退出"){
+                    finish()
+                }
+            }
         } else {
-            val isFirst = SaveKeyValues.getValue("isFirst", true) as Boolean
-            if (isFirst) {
-                AlertMessageDialog.Builder()
-                    .setContext(this)
-                    .setTitle("温馨提醒")
-                    .setMessage("本软件仅供内部使用，严禁商用或者用作其他非法用途")
-                    .setPositiveButton("知道了")
-                    .setOnDialogButtonClickListener { SaveKeyValues.putValue("isFirst", false) }
-                    .build().show()
+            val isFirst = CacheDiskUtils.getInstance().getString("isFirst")
+            if (isFirst == null) {
+                MaterialDialog(this).show {
+                    title(text = "温馨提醒")
+                    message(text = "本软件仅供内部使用，严禁商用或者用作其他非法用途")
+                    positiveButton(text = "知道了"){
+                        CacheDiskUtils.getInstance().put("isFirst", "launched")
+                    }
+                }
             }
         }
     }

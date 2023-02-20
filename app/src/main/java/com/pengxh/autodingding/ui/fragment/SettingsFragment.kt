@@ -4,13 +4,12 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.provider.Settings
 import android.view.View
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.app.NotificationManagerCompat
 import cn.jpush.android.api.JPushInterface
 import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.IntentUtils
-import com.pengxh.app.multilib.widget.EasyToast
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.AndroidxBaseFragment
 import com.pengxh.autodingding.BaseApplication.Companion.daoSession
 import com.pengxh.autodingding.BuildConfig
@@ -128,7 +127,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
                         JPushInterface.getRegistrationID(context)
                     )
                 )
-                EasyToast.showToast("已复制", EasyToast.SUCCESS)
+                ToastUtils.showShort("已复制")
             }
             R.id.btnTestLaunchDing -> {
                 activity?.startActivity(IntentUtils.getLaunchAppIntent(Constant.DINGDING))

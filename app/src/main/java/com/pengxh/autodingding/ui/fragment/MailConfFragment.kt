@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.CacheDiskUtils
-import com.pengxh.app.multilib.widget.EasyToast
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.databinding.FragmentMailConfBinding
 import com.pengxh.autodingding.utils.Utils
 
@@ -47,11 +47,11 @@ class MailConfFragment :Fragment() {
             val fromAuth = binding.etSenderEmailAuth.text.toString()
             val toAddress = binding.etReceiverEmailAddress.text.toString()
             if(fromAddress.isEmpty() || fromAuth.isEmpty() || toAddress.isEmpty()){
-                EasyToast.showToast("配置选项缺失！", EasyToast.ERROR)
+                ToastUtils.showShort("配置选项缺失！")
             }else{
                 vm.sendMail(fromAddress, fromAuth, toAddress)
                 configTested = true
-                EasyToast.showToast("已尝试发送邮件", EasyToast.DEFAULT)
+                ToastUtils.showShort("已尝试发送邮件")
             }
         }
         binding.btnSave.setOnClickListener {
@@ -62,9 +62,9 @@ class MailConfFragment :Fragment() {
                 CacheDiskUtils.getInstance().put("senderEmail" , fromAddress)
                 CacheDiskUtils.getInstance().put("senderAuth", fromAuth)
                 Utils.saveEmailAddress(toAddress)
-                EasyToast.showToast("保存配置成功", EasyToast.SUCCESS)
+                ToastUtils.showShort("保存配置成功")
             }else{
-                EasyToast.showToast("请先进行配置测试", EasyToast.WARING)
+                ToastUtils.showShort("请先进行配置测试")
             }
         }
         binding.ivBack.setOnClickListener {

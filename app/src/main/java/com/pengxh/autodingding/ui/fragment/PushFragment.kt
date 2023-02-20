@@ -9,10 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cn.jpush.android.api.JPushInterface
 import com.blankj.utilcode.util.CacheDiskUtils
-import com.blankj.utilcode.util.ClipboardUtils
-import com.pengxh.app.multilib.widget.EasyToast
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.databinding.FragmentPushBinding
 import com.pengxh.autodingding.utils.clickNoRepeat
 
@@ -39,10 +37,10 @@ open class PushFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         pushVM.pushResult.observe(viewLifecycleOwner){
             if (it.errorCode == 0){
-                EasyToast.showToast("指令下发成功", EasyToast.SUCCESS)
+                ToastUtils.showShort("指令下发成功")
                 saveRegId()
             }else{
-                EasyToast.showToast(it.messageCn, EasyToast.ERROR)
+                ToastUtils.showShort(it.messageCn)
             }
         }
         val savedRegId = CacheDiskUtils.getInstance().getString("regId")
@@ -56,35 +54,35 @@ open class PushFragment : Fragment() {
         }
         binding!!.btnCheck.setOnClickListener {
             if (binding!!.etTargetRegId.text.toString() == "") {
-                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+                ToastUtils.showShort("注册id必须填写")
             }else {
                 pushVM.pushCheck(binding!!.etTargetRegId.text.toString())
             }
         }
         binding!!.btnPush.setOnClickListener {
             if (binding!!.etTargetRegId.text.toString() == "") {
-                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+                ToastUtils.showShort("注册id必须填写")
             }else {
                 pushVM.pushSign(binding!!.etTargetRegId.text.toString())
             }
         }
         binding!!.btnStatus.setOnClickListener {
             if (binding!!.etTargetRegId.text.toString() == "") {
-                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+                ToastUtils.showShort("注册id必须填写")
             } else {
                 pushVM.pushStatusFetch(binding!!.etTargetRegId.text.toString())
             }
         }
         binding!!.btnScreenShot.setOnClickListener {
             if (binding!!.etTargetRegId.text.toString() == "") {
-                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+                ToastUtils.showShort("注册id必须填写")
             } else {
                 pushVM.pushScreenShot(binding!!.etTargetRegId.text.toString())
             }
         }
         binding!!.btnManualSign.clickNoRepeat(1000) {
             if (binding!!.etTargetRegId.text.toString() == "") {
-                EasyToast.showToast("注册id必须填写", EasyToast.ERROR)
+                ToastUtils.showShort("注册id必须填写")
             } else {
                 pushVM.pushManualSign(binding!!.etTargetRegId.text.toString())
             }

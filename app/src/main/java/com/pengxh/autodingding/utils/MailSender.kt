@@ -1,7 +1,7 @@
 package com.pengxh.autodingding.utils
 
 import android.util.Log
-import com.pengxh.app.multilib.widget.EasyToast
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.bean.MailInfo
 import java.util.*
 import javax.activation.DataHandler
@@ -79,7 +79,7 @@ class MailSender {
             val mainPart: Multipart = MimeMultipart()
             val file = mailInfo.attachFile
             if (!file.exists()) {
-                EasyToast.showToast("需要导出的表格不存在，请重试", EasyToast.WARING)
+                ToastUtils.showShort("需要导出的表格不存在，请重试")
                 return false
             } else {
                 // 创建一个MimeBodyPart来包含附件

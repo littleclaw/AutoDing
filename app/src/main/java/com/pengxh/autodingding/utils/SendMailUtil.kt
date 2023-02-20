@@ -1,7 +1,7 @@
 package com.pengxh.autodingding.utils
 
 import com.blankj.utilcode.util.CacheDiskUtils
-import com.pengxh.app.multilib.widget.EasyToast
+import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.bean.MailInfo
 import java.io.File
 
@@ -26,7 +26,7 @@ object SendMailUtil {
     fun sendAttachFileEmail(toAddress: String, filePath: String?) {
         val file = File(filePath)
         if (!file.exists()) {
-            EasyToast.showToast("打卡记录不存在，请检查", EasyToast.ERROR)
+            ToastUtils.showLong("打卡记录不存在，请检查")
             return
         }
         Thread {
