@@ -8,16 +8,13 @@ import android.view.MenuItem
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.viewpager2.widget.ViewPager2
-import cn.vove7.andro_accessibility_api.viewfinder.text
 import com.afollestad.materialdialogs.MaterialDialog
 import com.blankj.utilcode.util.*
 import com.gyf.immersionbar.ImmersionBar
 import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.R
 import com.pengxh.autodingding.actions.DingSignAction
-import com.pengxh.autodingding.adapter.BaseFragmentAdapter
 import com.pengxh.autodingding.adapter.FragAdapter
 import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.service.BaseAccessibilityService
@@ -142,17 +139,6 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 message(text = "手机没有安装钉钉软件，无法自动打卡")
                 positiveButton(text = "退出"){
                     finish()
-                }
-            }
-        } else {
-            val isFirst = CacheDiskUtils.getInstance().getString("isFirst")
-            if (isFirst == null) {
-                MaterialDialog(this).show {
-                    title(text = "温馨提醒")
-                    message(text = "本软件仅供内部使用，严禁商用或者用作其他非法用途")
-                    positiveButton(text = "知道了"){
-                        CacheDiskUtils.getInstance().put("isFirst", "launched")
-                    }
                 }
             }
         }

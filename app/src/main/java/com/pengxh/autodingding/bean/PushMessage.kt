@@ -5,5 +5,5 @@ class PushMessage {
     var audience: PushAudience? = null
     var notification: PushNotification? = null
     var message: BodyMsg? = null
-    var options: PushOption = PushOption()
+    var options: PushOption? = null
 }
