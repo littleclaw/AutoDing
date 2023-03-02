@@ -18,6 +18,7 @@ import com.pengxh.autodingding.ui.MainActivity
 import com.pengxh.autodingding.utils.SendMailUtil
 import com.pengxh.autodingding.utils.Utils
 import com.pengxh.autodingding.utils.launchWithExpHandler
+import kotlinx.coroutines.delay
 
 class MyPushReceiver : JPushMessageReceiver() {
     override fun onMessage(context: Context, customMessage: CustomMessage) {
@@ -43,8 +44,8 @@ class MyPushReceiver : JPushMessageReceiver() {
             val curBattery = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)///当前电量百分比
             val regId = JPushInterface.getRegistrationID(context)
             val screenLock = ScreenUtils.isScreenLock()
-            val message = "注册ID: $regId 是否锁屏：$screenLock " +
-                    "当前充电：$charging 当前电量百分比：$curBattery %"
+            val message = "注册ID: $regId ${if (screenLock) "是" else "未"}锁屏 " +
+                    "当前${if (charging) "正在" else "未"}充电： 当前电量百分比：$curBattery %"
             SendMailUtil.send(emailAddress, message)
         } else if (MSG_SCREEN_SHOT == customMessage.message){
             wakePhone(context)
@@ -72,6 +73,7 @@ class MyPushReceiver : JPushMessageReceiver() {
         val screenOn = powerManager.isInteractive
         if (!screenOn) {
             //唤醒屏幕
+            Log.d(TAG, "screen off, now waking up phone")
             val wakeLock = powerManager.newWakeLock(
                 PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
                 "autoDing:bright"
@@ -85,6 +87,7 @@ class MyPushReceiver : JPushMessageReceiver() {
         val keyGuardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (keyGuardManager.isKeyguardLocked){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d("unlock", "8.0+ version dismiss function")
                 keyGuardManager.requestDismissKeyguard(ActivityUtils.getTopActivity(), object : KeyguardManager.KeyguardDismissCallback(){
                     override fun onDismissSucceeded() {
                         Log.d("unlock", "success")
@@ -96,6 +99,7 @@ class MyPushReceiver : JPushMessageReceiver() {
                         ToastUtils.showShort("解锁错误")
                         launchWithExpHandler {
                             SwipeUnlockAction().run(ActivityUtils.getTopActivity())
+                            delay(3000)
                             callback.invoke()
                         }
                     }
@@ -106,6 +110,7 @@ class MyPushReceiver : JPushMessageReceiver() {
                     }
                 })
             }else{
+                Log.d("unlock", "old version dismiss function")
                 keyGuardManager.newKeyguardLock("dismiss").disableKeyguard()
             }
         }else{

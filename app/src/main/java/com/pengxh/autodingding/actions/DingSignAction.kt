@@ -52,6 +52,7 @@ class DingSignAction: Action() {
             }
             val signButton = SF.containsText("下班打卡")
                 .or(SF.containsText("上班打卡"))
+                .or(SF.containsText("更新打卡"))
                 .findFirst(false)
             genLog("查找上班打卡或下班打卡大按钮"+if (signButton!=null) "成功" else "失败")
             val clickSucceed:Boolean = signButton?.tryClick()?:false
