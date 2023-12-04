@@ -25,7 +25,7 @@ class MailSender {
             authenticator = EmailAuthenticator(mailInfo.userName, mailInfo.password)
         }
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
-        val sendMailSession = Session.getDefaultInstance(pro, authenticator)
+        val sendMailSession = Session.getInstance(pro, authenticator)
 
         // 根据session创建一个邮件消息
         val mailMessage: Message = MimeMessage(sendMailSession)
@@ -59,7 +59,7 @@ class MailSender {
             authenticator = EmailAuthenticator(mailInfo.userName, mailInfo.password)
         }
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
-        val sendMailSession = Session.getDefaultInstance(p, authenticator)
+        val sendMailSession = Session.getInstance(p, authenticator)
         try {
             // 根据session创建一个邮件消息
             val mailMessage: Message = MimeMessage(sendMailSession)
