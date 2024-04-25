@@ -1,4 +1,6 @@
 # AutoDing
+[APK下载地址](https://github.com/littleclaw/AutoDing/releases/tag/1.1.3) 
+
 钉钉打卡，包括定时打卡和远程推送打卡,定时打卡功能是根据AutoDingDing项目修改而来，不是此项目重点，此项目主要功能在于实现远程
 打开钉钉，从而完成极速打卡，其主要是用极光推送SDK实现网络指令下发。
 建议用一台闲置的手机放在公司来打卡，另一台手机来推送打卡指令。
