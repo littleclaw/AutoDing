@@ -1,4 +1,4 @@
-package com.pengxh.autodingding
+package com.pengxh.autodingding.service
 
 import android.app.KeyguardManager
 import android.content.Context
@@ -9,28 +9,40 @@ import android.os.PowerManager
 import android.util.Log
 import cn.jpush.android.api.CustomMessage
 import cn.jpush.android.api.JPushInterface
-import cn.jpush.android.service.JPushMessageReceiver
+import cn.jpush.android.service.JPushMessageService
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.actions.SwipeUnlockAction
+import com.pengxh.autodingding.bean.BodyMsg
+import com.pengxh.autodingding.bean.PushAudience
+import com.pengxh.autodingding.bean.PushMessage
+import com.pengxh.autodingding.net.RetrofitManager
+import com.pengxh.autodingding.net.api.PushApi
 import com.pengxh.autodingding.ui.MainActivity
 import com.pengxh.autodingding.utils.SendMailUtil
 import com.pengxh.autodingding.utils.Utils
 import com.pengxh.autodingding.utils.launchWithExpHandler
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
-class MyPushReceiver : JPushMessageReceiver() {
+class PushCoreService : JPushMessageService() {
     override fun onMessage(context: Context, customMessage: CustomMessage) {
         Log.d(TAG, customMessage.message)
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val senderRegId = customMessage.title
         if (MSG_MAIL_CHECK == customMessage.message) {
             wakePhone(context)
             unlockPhone(context){
                 intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_SEND_MAIL)
                 context.startActivity(intent)
             }
+            reply(senderRegId)
         } else if (MSG_SIGN == customMessage.message) {
             wakePhone(context)
             unlockPhone(context){
@@ -118,6 +130,24 @@ class MyPushReceiver : JPushMessageReceiver() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun reply(targetRegId:String){
+        launchWithExpHandler {
+            withContext(Dispatchers.IO){
+                val api = RetrofitManager.retrofitClient.create(PushApi::class.java)
+                val pushMessage = PushMessage()
+                pushMessage.audience = PushAudience().apply {
+                    registration_id = mutableListOf(targetRegId)
+                }
+                pushMessage.message = BodyMsg().apply {
+                    msg_content = MSG_REPLY
+                    title = CacheDiskUtils.getInstance().getString("pushRegId")
+                }
+                api.pushMsg(pushMessage)
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "MyReceiver"
         const val MSG_MAIL_CHECK = "check"
@@ -126,5 +156,6 @@ class MyPushReceiver : JPushMessageReceiver() {
         const val MSG_SCREEN_SHOT = "screenShot"
         const val MSG_SLEEP = "goToSleep"
         const val MSG_MANUAL_SIGN = "manualSign"
+        const val MSG_REPLY = "reply"
     }
 }

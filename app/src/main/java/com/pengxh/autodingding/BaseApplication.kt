@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import cn.vove7.andro_accessibility_api.AccessibilityApi
+import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.greendao.DaoMaster
 import com.pengxh.autodingding.greendao.DaoMaster.DevOpenHelper
@@ -27,7 +28,9 @@ class BaseApplication : Application() {
         val strings = HashSet<String>()
         strings.add("main")
         JPushInterface.setTags(this, 0, strings)
-        Log.d("push", JPushInterface.getRegistrationID(this))
+        val pushRegId = JPushInterface.getRegistrationID(this)
+        Log.d("push", pushRegId)
+        CacheDiskUtils.getInstance().put("pushRegId", pushRegId)
 
         //Bugly初使化
         Bugly.init(this, "84a0dd7960", BuildConfig.DEBUG)

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.pengxh.autodingding">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--亮屏和解锁-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="com.pengxh.autodingding.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -65,6 +65,14 @@
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
         </service>
+        <service android:name=".service.PushCoreService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
+                <category android:name="com.pengxh.autodingding" />
+            </intent-filter>
+        </service>
         <service android:name=".service.BaseAccessibilityService"
             android:description="@string/base_ser_desc"
             android:label="@string/base_ser_desc"
@@ -89,30 +97,11 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/gesture_accessibility_config" />
         </service>
-        <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->
-        <!-- 3.3.0开始所有事件将通过该类回调 -->
-        <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
-        <receiver
-            android:name=".MyPushReceiver"
-            android:enabled="true"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="com.pengxh.autodingding" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".BatteryLevelReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW"/>
                 <action android:name="android.intent.action.BATTERY_OKAY"/>
-            </intent-filter>
-        </receiver>
-        <receiver android:name="cn.jpush.android.service.PushReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="com.pengxh.autodingding" />
             </intent-filter>
         </receiver>
 

@@ -1,35 +1,29 @@
 package com.pengxh.autodingding.ui
 
-import com.pengxh.autodingding.BaseApplication.Companion.daoSession
-import com.pengxh.autodingding.AndroidxBaseActivity
-import com.pengxh.autodingding.ui.HistoryRecordActivity.WeakReferenceHandler
-import com.pengxh.autodingding.greendao.HistoryRecordBeanDao
-import com.pengxh.autodingding.bean.HistoryRecordBean
-import com.pengxh.autodingding.adapter.HistoryRecordAdapter
-import com.pengxh.autodingding.utils.StatusBarColorUtil
-import com.gyf.immersionbar.ImmersionBar
-import com.pengxh.autodingding.BaseApplication
-import com.scwang.smartrefresh.layout.api.RefreshLayout
 import android.os.CountDownTimer
 import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.view.View
 import androidx.core.content.ContextCompat
-import cn.vove7.andro_accessibility_api.viewfinder.text
 import com.afollestad.materialdialogs.MaterialDialog
-import com.pengxh.autodingding.ui.HistoryRecordActivity
-import com.pengxh.autodingding.widgets.EasyPopupWindow
-import com.pengxh.autodingding.widgets.EasyPopupWindow.PopupWindowClickListener
-import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.SizeUtils
+import com.blankj.utilcode.util.ToastUtils
+import com.gyf.immersionbar.ImmersionBar
+import com.pengxh.autodingding.AndroidxBaseActivity
+import com.pengxh.autodingding.BaseApplication.Companion.daoSession
 import com.pengxh.autodingding.R
+import com.pengxh.autodingding.adapter.HistoryRecordAdapter
+import com.pengxh.autodingding.bean.HistoryRecordBean
 import com.pengxh.autodingding.databinding.ActivityHistoryBinding
+import com.pengxh.autodingding.greendao.HistoryRecordBeanDao
 import com.pengxh.autodingding.utils.ExcelUtils
+import com.pengxh.autodingding.utils.StatusBarColorUtil
 import com.pengxh.autodingding.utils.Utils
+import com.pengxh.autodingding.widgets.EasyPopupWindow
+import com.scwang.smartrefresh.layout.api.RefreshLayout
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.*
 
 class HistoryRecordActivity : AndroidxBaseActivity<ActivityHistoryBinding?>(),
     View.OnClickListener {
@@ -59,7 +53,7 @@ class HistoryRecordActivity : AndroidxBaseActivity<ActivityHistoryBinding?>(),
                 override fun onTick(millisUntilFinished: Long) {}
                 override fun onFinish() {
                     dataBeans.clear()
-                    dataBeans = recordBeanDao!!.loadAll()
+                    dataBeans = recordBeanDao.loadAll()
                     layout.finishRefresh()
                     isRefresh = false
                     weakReferenceHandler!!.sendEmptyMessage(2022021403)
@@ -96,46 +90,48 @@ class HistoryRecordActivity : AndroidxBaseActivity<ActivityHistoryBinding?>(),
 
     override fun onClick(view: View) {
         val easyPopupWindow = EasyPopupWindow(this, items)
-        easyPopupWindow.setPopupWindowClickListener { position: Int ->
-            if (position == 0) {
-                //添加导出功能
-                if (dataBeans.size == 0) {
-                    MaterialDialog(this).show {
-                        title(text = "温馨提示")
-                        message(text = "空空如也，无法删除")
-                        positiveButton()
-                    }
-                } else {
-                    MaterialDialog(this).show {
-                        title(text="清除")
-                        message(text = "是否确定清除打卡记录？")
-                        positiveButton{
-                            recordBeanDao.deleteAll()
-                            dataBeans.clear()
-                            historyAdapter?.notifyDataSetChanged()
+        easyPopupWindow.setPopupWindowClickListener(object: EasyPopupWindow.PopupWindowClickListener{
+            override fun popupWindowClick(position: Int) {
+                if (position == 0) {
+                    //添加导出功能
+                    if (dataBeans.size == 0) {
+                        MaterialDialog(this@HistoryRecordActivity).show {
+                            title(text = "温馨提示")
+                            message(text = "空空如也，无法删除")
+                            positiveButton()
+                        }
+                    } else {
+                        MaterialDialog(this@HistoryRecordActivity).show {
+                            title(text="清除")
+                            message(text = "是否确定清除打卡记录？")
+                            positiveButton{
+                                recordBeanDao.deleteAll()
+                                dataBeans.clear()
+                                historyAdapter?.notifyDataSetChanged()
+                            }
                         }
                     }
-                }
-            } else if (position == 1) {
-                val emailAddress = Utils.readEmailAddress()
-                if (emailAddress == "") {
-                    ToastUtils.showShort("未设置邮箱，无法导出")
-                    return@setPopupWindowClickListener
-                }
-                if (dataBeans.size == 0) {
-                    ToastUtils.showShort("无打卡记录，无法导出")
-                    return@setPopupWindowClickListener
-                }
-                MaterialDialog(this).show {
-                    title(text ="导出")
-                    message(text= "导出到$emailAddress？")
-                    positiveButton {
-                        pullToEmail(dataBeans)
+                } else if (position == 1) {
+                    val emailAddress = Utils.readEmailAddress()
+                    if (emailAddress == "") {
+                        ToastUtils.showShort("未设置邮箱，无法导出")
+                        return
                     }
-                    negativeButton()
+                    if (dataBeans.size == 0) {
+                        ToastUtils.showShort("无打卡记录，无法导出")
+                        return
+                    }
+                    MaterialDialog(this@HistoryRecordActivity).show {
+                        title(text ="导出")
+                        message(text= "导出到$emailAddress？")
+                        positiveButton {
+                            pullToEmail(dataBeans)
+                        }
+                        negativeButton()
+                    }
                 }
             }
-        }
+        })
         easyPopupWindow.showAsDropDown(
             viewBinding!!.titleRightView, viewBinding!!.titleRightView.width, SizeUtils.dp2px(10f)
         )

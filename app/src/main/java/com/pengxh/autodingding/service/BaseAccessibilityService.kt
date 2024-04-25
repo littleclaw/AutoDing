@@ -2,12 +2,12 @@ package com.pengxh.autodingding.service
 
 import android.util.Log
 import cn.vove7.andro_accessibility_api.AccessibilityApi
-import cn.vove7.andro_accessibility_api.AppScope
+import cn.vove7.auto.core.AppScope
 
-class BaseAccessibilityService : AccessibilityApi() {
-    override val enableListenAppScope: Boolean
+class BaseAccessibilityService: AccessibilityApi() {
+
+    override val enableListenPageUpdate: Boolean
         get() = true
-
     companion object {
         private const val TAG = "BaseAccessibilityService"
     }

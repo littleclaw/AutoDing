@@ -46,6 +46,13 @@ class NotificationMonitorService : NotificationListenerService() {
                 //通知发送邮件和更新界面
                 sendEvent(notificationText)
             }
+        }else if(packageName == "com.pengxh.autodingding"){
+            if (notificationText == null || notificationText == "") {
+                return
+            }
+            if(notificationText.contains("")){
+
+            }
         }
     }
 

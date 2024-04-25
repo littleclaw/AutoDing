@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_clock"
+        android:id="@+id/nav_auto_sign"
         android:enabled="true"
         android:icon="@mipmap/day_gray"
-        android:title="定时启动"
+        android:title="远程启动"
         app:showAsAction="ifRoom" />
 
     <item

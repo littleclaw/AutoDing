@@ -28,7 +28,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Job
 
 class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.OnClickListener {
-    var actionJob: Job? = null
+    private var actionJob: Job? = null
 
     override fun initData() {
         val historyBeanDao = daoSession!!.historyRecordBeanDao

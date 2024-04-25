@@ -45,6 +45,7 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
             val emailAddress = Utils.readEmailAddress()
             if (emailAddress == "") {
                 Log.d("receive event", "邮箱地址为空")
+                ToastUtils.showShort("收件邮箱未设置")
             } else {
                 if (it.isNotEmpty()){
                     SendMailUtil.send(emailAddress, it)

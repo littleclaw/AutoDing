@@ -33,10 +33,13 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     private val fragmentList: MutableList<Fragment> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+        this.window.addFlags(
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
     }
+
     override fun setupTopBarLayout() {
         StatusBarColorUtil.setColor(this, ContextCompat.getColor(this, R.color.colorAppThemeLight))
         ImmersionBar.with(this).statusBarDarkFont(false).init()
@@ -59,7 +62,8 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         if (ACTION_SEND_MAIL == action) {
             val emailAddress = Utils.readEmailAddress()
             Log.d("action", "sending email:$emailAddress")
-            val emailMessage = "如果发送指令1分钟内收到，说明应用正常运行中。" + TimeUtils.getNowString()
+            val emailMessage =
+                "如果发送指令1分钟内收到，说明应用正常运行中。" + TimeUtils.getNowString()
             send(emailAddress, emailMessage)
         } else if (ACTION_LAUNCH_DING == action) {
             try {
@@ -70,39 +74,47 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }else if (ACTION_SCREENSHOT == action){
+        } else if (ACTION_SCREENSHOT == action) {
             val emailAddress = Utils.readEmailAddress()
             GlobalScope.launch(Dispatchers.IO) {
                 delay(2000)
                 val screenBitmap = ScreenUtils.screenShot(this@MainActivity, false)
                 val temp = filesDir.absolutePath + "screenShot${TimeUtils.getNowString()}.jpg"
                 ImageUtils.save(screenBitmap, temp, Bitmap.CompressFormat.JPEG)
-                val mailInfo = SendMailUtil.createAttachMail(emailAddress, File(temp),
+                val mailInfo = SendMailUtil.createAttachMail(
+                    emailAddress, File(temp),
                     CacheDiskUtils.getInstance().getString("senderEmail", "lttclaw@qq.com"),
                     CacheDiskUtils.getInstance().getString("senderAuth", "hwpzapzrkmgpgaba")
                 )
-                LogUtils.d(temp, mailInfo.fromAddress, mailInfo.toAddress, mailInfo.attachFile.absolutePath)
+                LogUtils.d(
+                    temp,
+                    mailInfo.fromAddress,
+                    mailInfo.toAddress,
+                    mailInfo.attachFile?.absolutePath
+                )
                 MailSender().sendAccessoryMail(mailInfo)
             }
-        }else if (ACTION_MANUAL_SIGN == action){
+        } else if (ACTION_MANUAL_SIGN == action) {
             val dingAction = DingSignAction()
             if (actionJob?.isCompleted.let { it != null && !it }) {
                 toast("有正在运行的任务")
                 return
-            }else if (AccessibilityUtil.isServiceOn(this,
-                    BaseAccessibilityService::class.java.canonicalName?:""
-                ).not()){
+            } else if (AccessibilityUtil.isServiceOn(
+                    this,
+                    BaseAccessibilityService::class.java.canonicalName ?: ""
+                ).not()
+            ) {
                 toast("未开启相应的辅助服务")
                 return
             }
             actionJob = launchWithExpHandler {
                 dingAction.run(this@MainActivity)
-                val emailAddress = Utils.readEmailAddress()
-                val emailMessage = dingAction.message.toString()
-                MailSender().sendTextMail(createMail(emailAddress, emailMessage))
             }
             actionJob?.invokeOnCompletion {
                 toast("执行结束")
+                val emailAddress = Utils.readEmailAddress()
+                val emailMessage = dingAction.message.toString()
+                MailSender().sendTextMail(createMail(emailAddress, emailMessage))
             }
         }
     }
@@ -110,9 +122,9 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     public override fun initEvent() {
         viewBinding!!.bottomNavigation.setOnItemSelectedListener { item: MenuItem ->
             val itemId = item.itemId
-            if (itemId == R.id.nav_clock) {
+            if (itemId == R.id.nav_auto_sign) {
                 viewBinding!!.mViewPager.currentItem = 0
-                viewBinding!!.titleView.text = "定时启动"
+                viewBinding!!.titleView.text = "定时打卡"
             } else if (itemId == R.id.nav_settings) {
                 viewBinding!!.mViewPager.currentItem = 1
                 viewBinding!!.titleView.text = "设置"
@@ -122,7 +134,8 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         val fragmentAdapter = FragAdapter(this, fragmentList)
         viewBinding!!.mViewPager.adapter = fragmentAdapter
         viewBinding!!.mViewPager.offscreenPageLimit = fragmentList.size
-        viewBinding!!.mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        viewBinding!!.mViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (menuItem != null) {
                     menuItem!!.isChecked = false
@@ -137,7 +150,7 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
             MaterialDialog(this).show {
                 title(text = "温馨提醒")
                 message(text = "手机没有安装钉钉软件，无法自动打卡")
-                positiveButton(text = "退出"){
+                positiveButton(text = "退出") {
                     finish()
                 }
             }

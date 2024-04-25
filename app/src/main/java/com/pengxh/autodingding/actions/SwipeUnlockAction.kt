@@ -1,7 +1,7 @@
 package com.pengxh.autodingding.actions
 
 import android.app.Activity
-import cn.vove7.andro_accessibility_api.api.swipe
+import cn.vove7.auto.core.api.swipe
 import kotlinx.coroutines.delay
 
 class SwipeUnlockAction(val orientation: ORIENTATION=ORIENTATION.VERTICAL): Action() {

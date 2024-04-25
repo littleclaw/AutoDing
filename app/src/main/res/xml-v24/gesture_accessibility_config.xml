@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accessibilityEventTypes=""
-    android:accessibilityFeedbackType=""
-    android:accessibilityFlags=""
-    android:canPerformGestures="true"
-    android:canRetrieveWindowContent="false"
-    android:description="@string/ges_ser_desc"
+    android:accessibilityEventTypes="typeAllMask"
+    android:accessibilityFeedbackType="feedbackAllMask"
+    android:accessibilityFlags="flagIncludeNotImportantViews|flagReportViewIds|flagRetrieveInteractiveWindows|flagRequestEnhancedWebAccessibility"
+    android:canRetrieveWindowContent="true"
     android:notificationTimeout="10"
-    android:packageNames=""
+    android:canRequestEnhancedWebAccessibility="true"
     android:settingsActivity=".MainActivity"
+    android:canPerformGestures="true"
+    android:description="@string/ges_ser_desc"
     android:summary="执行手势" />
 

@@ -90,11 +90,11 @@ open class PushFragment : Fragment() {
 
     }
 
-    private fun <T : ViewModel?> getFragmentViewModel(modelClass: Class<T>): T {
+    private fun <T : ViewModel> getFragmentViewModel(modelClass: Class<T>): T {
         if (fragmentProvider == null) {
             fragmentProvider = ViewModelProvider(this)
         }
-        return fragmentProvider!!.get(modelClass)
+        return fragmentProvider!![modelClass]
     }
 
     private fun saveRegId(){

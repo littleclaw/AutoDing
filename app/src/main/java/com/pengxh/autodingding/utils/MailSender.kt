@@ -22,7 +22,7 @@ class MailSender {
         val pro = mailInfo.properties
         if (mailInfo.isValidate) {
             // 如果需要身份认证，则创建一个密码验证器
-            authenticator = EmailAuthenticator(mailInfo.userName, mailInfo.password)
+            authenticator = EmailAuthenticator(mailInfo.userName ?: "", mailInfo.password ?: "")
         }
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
         val sendMailSession = Session.getInstance(pro, authenticator)
@@ -56,7 +56,7 @@ class MailSender {
         val p = mailInfo.properties
         // 如果需要身份验证，则创建一个密码验证器
         if (mailInfo.isValidate) {
-            authenticator = EmailAuthenticator(mailInfo.userName, mailInfo.password)
+            authenticator = EmailAuthenticator(mailInfo.userName ?: "", mailInfo.password ?: "")
         }
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
         val sendMailSession = Session.getInstance(p, authenticator)
@@ -77,7 +77,7 @@ class MailSender {
             mailMessage.sentDate = Date()
             // MimeMultipart类是一个容器类，包含MimeBodyPart类型的对象
             val mainPart: Multipart = MimeMultipart()
-            val file = mailInfo.attachFile
+            val file = mailInfo.attachFile!!
             if (!file.exists()) {
                 ToastUtils.showShort("需要导出的表格不存在，请重试")
                 return false

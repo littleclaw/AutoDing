@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
     defaultConfig {
         applicationId "com.pengxh.autodingding"
         minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 12
-        versionName "1.1.2"
+        targetSdkVersion 33
+        versionCode 14
+        versionName "1.1.4"
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
@@ -67,16 +67,13 @@ android {
         }
     }
     packagingOptions {
-//        pickFirst 'META-INF/LICENSE.txt' // picks the JavaMail license file
-        exclude 'META-INF/NOTICE.md'
-        exclude 'META-INF/LICENSE.md'
+        resources {
+            excludes += ['META-INF/NOTICE.md', 'META-INF/LICENSE.md']
+        }
     }
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
-    }
-    lintOptions {
-        checkReleaseBuilds false
     }
 
     greendao {
@@ -89,7 +86,23 @@ android {
         viewBinding true
         dataBinding true
     }
-    buildToolsVersion '31.0.0'
+    namespace 'com.pengxh.autodingding'
+    lint {
+        checkReleaseBuilds false
+    }
+}
+
+tasks.configureEach { task ->
+    if (task.name.matches("\\w*compile\\w*Kotlin")) {
+        task.dependsOn('greendao')
+    }
+    if (task.name.matches("\\w*kaptGenerateStubs\\w*Kotlin")) {
+        task.dependsOn('greendao')
+    }
+
+    if (task.name.matches("\\w*kapt\\w*Kotlin")) {
+        task.dependsOn('greendao')
+    }
 }
 
 dependencies {
@@ -132,13 +145,13 @@ dependencies {
     //数据库框架
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation "com.blankj:utilcodex:1.30.5"
-    implementation 'cn.jiguang.sdk:jcore:2.7.2'  // 此处以JCore 2.7.2 版本为例。
-    implementation 'cn.jiguang.sdk:jpush:4.8.1'  // 此处以JPush 4.0.0 版本为例
+    implementation 'cn.jiguang.sdk:jpush:5.2.2'
+    implementation 'cn.jiguang.sdk:joperate:2.0.2'
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     // 接入华为厂商
     implementation 'com.huawei.hms:push:6.3.0.304'
     implementation 'cn.jiguang.sdk.plugin:huawei:4.8.1'
     //无障碍
-    implementation 'com.github.Vove7:Android-Accessibility-Api:2.1.1'
+    implementation 'com.github.Krosxx:Android-Auto-Api:4.1.2'
 
 }
