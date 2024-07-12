@@ -33,7 +33,7 @@
 		"project_id":"99536292102578695",
 		"app_id":"106973407",
 		"api_key":"DAEDAG8XEtHU0XRiO4euUr0YYvN32VUANwl4EJ9bco19q3PVlcnArfpRSLpwI0BDVGbbwXUrjnRXjao3auv7w8Vl2H1fmX7spzS43Q==",
-		"package_name":"com.pengxh.autodingding"
+		"package_name":"com.furry.rimet"
 	},
 	"oauth_client":{
 		"client_id":"106973407",
@@ -41,7 +41,7 @@
 	},
 	"app_info":{
 		"app_id":"106973407",
-		"package_name":"com.pengxh.autodingding"
+		"package_name":"com.furry.rimet"
 	},
 	"service":{
 		"analytics":{
@@ -75,12 +75,12 @@
 	"configuration_version":"3.0",
 	"appInfos":[
 		{
-			"package_name":"com.pengxh.autodingding",
+			"package_name":"com.furry.rimet",
 			"client":{
 				"app_id":"106973407"
 			},
 			"app_info":{
-				"package_name":"com.pengxh.autodingding",
+				"package_name":"com.furry.rimet",
 				"app_id":"106973407"
 			},
 			"oauth_client":{

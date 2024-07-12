@@ -12,17 +12,7 @@ import pub.devrel.easypermissions.EasyPermissions.PermissionCallbacks
 class WelcomeActivity : AppCompatActivity(), PermissionCallbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //判断是否有权限，如果版本大于5.1才需要判断（即6.0以上），其他则不需要判断。
-        if (EasyPermissions.hasPermissions(this, *Constant.USER_PERMISSIONS)) {
-            startMainActivity()
-        } else {
-            EasyPermissions.requestPermissions(
-                this,
-                "需要获取相关权限",
-                Constant.PERMISSIONS_CODE,
-                *Constant.USER_PERMISSIONS
-            )
-        }
+        startMainActivity()
     }
 
     private fun startMainActivity() {

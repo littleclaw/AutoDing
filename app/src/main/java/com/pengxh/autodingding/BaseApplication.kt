@@ -6,16 +6,13 @@ import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import cn.vove7.andro_accessibility_api.AccessibilityApi
 import com.blankj.utilcode.util.CacheDiskUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.greendao.DaoMaster
 import com.pengxh.autodingding.greendao.DaoMaster.DevOpenHelper
 import com.pengxh.autodingding.greendao.DaoSession
 import com.pengxh.autodingding.service.BaseAccessibilityService
 import com.pengxh.autodingding.service.GestureService
-import com.pengxh.autodingding.ui.MainActivity
 import com.pengxh.autodingding.utils.Utils
 import com.tencent.bugly.Bugly
-import com.tencent.bugly.beta.Beta
 
 class BaseApplication : Application() {
     override fun onCreate() {
@@ -33,12 +30,7 @@ class BaseApplication : Application() {
         CacheDiskUtils.getInstance().put("pushRegId", pushRegId)
 
         //Bugly初使化
-        Bugly.init(this, "84a0dd7960", BuildConfig.DEBUG)
-        Beta.autoCheckUpgrade = true
-        Beta.autoDownloadOnWifi = true
-        Beta.largeIconId = R.mipmap.ic_launcher
-        Beta.enableNotification = true
-        Beta.canShowUpgradeActs.add(MainActivity::class.java)
+        Bugly.init(this, "84a0dd7960", false)
 
         //辅助服务
         AccessibilityApi.apply {

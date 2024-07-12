@@ -7,8 +7,8 @@ import okhttp3.Response
 import java.io.IOException
 
 object AuthInterceptor : Interceptor {
-    private const val appKey = "c48c0906e554f88ad914329b"
-    private const val masterSecret = "9b6082ef0c5d1ad5d6734da7"
+    private const val appKey = "a4d990120558f6f599084ee0"
+    private const val masterSecret = "e186567dcf277cec635c2336"
     private const val authString = "$appKey:$masterSecret"
 
     private var token = "Basic ${EncodeUtils.base64Encode2String(authString.toByteArray())}"
