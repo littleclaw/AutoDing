@@ -1,6 +1,11 @@
 # AutoDing
-！！请注意，当前该应用包名已经在钉钉黑名单中，如果手机上装了此应用有可能会被判定疑似作弊，反制方法是在钉钉权限设置里禁止钉钉读取应用列表。
-[APK下载地址](https://github.com/littleclaw/AutoDing/releases/tag/1.1.3) 
+！！请注意，原先的包名和应用名已在作弊检测黑名单中，现已更改新包名和应用名，下载链接如下
+[APK下载地址](https://github.com/littleclaw/AutoDing/releases/tag/1.1.5) 
++ 虽然更新了包名，但不能排除新包名后续又被添加到黑名单的问题，如需要完全解决此问题，需要各位自行下载源码做如下定制打包。
+1. 修改gradle中applicationId,namespace为自己的（不要用可能被判定为作弊的单词当包名）
+2. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存
+3. 在项目gradle配置中的manifestPlaceholders中的JPUSH_APPKEY值换成上一步的appKey
+4. 在代码搜索类AuthInterceptor，替换里面的常量appKey和masterSecret
 
 钉钉打卡，包括定时打卡和远程推送打卡,定时打卡功能是根据AutoDingDing项目修改而来，不是此项目重点，此项目主要功能在于实现远程
 打开钉钉，从而完成极速打卡，其主要是用极光推送SDK实现网络指令下发。
