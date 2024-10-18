@@ -5,18 +5,35 @@ import android.graphics.Color
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import com.blankj.utilcode.constant.TimeConstants
+import com.blankj.utilcode.util.CacheDiskUtils
+import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.drake.channel.receiveEvent
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
 import com.pengxh.autodingding.AndroidxBaseFragment
 import com.pengxh.autodingding.R
+import com.pengxh.autodingding.bean.BodyMsg
+import com.pengxh.autodingding.bean.PushAudience
+import com.pengxh.autodingding.bean.PushMessage
 import com.pengxh.autodingding.databinding.FragmentDayBinding
+import com.pengxh.autodingding.net.RetrofitManager
+import com.pengxh.autodingding.net.api.PushApi
+import com.pengxh.autodingding.net.api.WorkDayApi
+import com.pengxh.autodingding.service.PushCoreService
 import com.pengxh.autodingding.ui.WelcomeActivity
 import com.pengxh.autodingding.utils.Constant
 import com.pengxh.autodingding.utils.SendMailUtil
 import com.pengxh.autodingding.utils.TimeOrDateUtil
 import com.pengxh.autodingding.utils.Utils
+import com.pengxh.autodingding.utils.launchWithExpHandler
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.OnClickListener {
@@ -114,6 +131,9 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
                 override fun onFinish() {
                     viewBinding!!.startTimeView.text = "--"
                     Utils.openDingDing(Constant.DINGDING)
+                    setNextPeriod(millSeconds){
+                        onDuty(it)
+                    }
                 }
             }
             (amCountDownTimer as CountDownTimer).start()
@@ -138,11 +158,41 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
                 override fun onFinish() {
                     viewBinding!!.endTimeView.text = "--"
                     Utils.openDingDing(Constant.DINGDING)
+                    setNextPeriod(millSeconds){
+                        offDuty(it)
+                    }
                 }
             }
             (pmCountDownTimer as CountDownTimer).start()
         } else {
             ToastUtils.showShort("已有任务在进行中")
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun setNextPeriod(millSeconds: Long, block: (timeStamp:Long)->Unit){
+        val retrofit = RetrofitManager.workdayClient
+        val api = retrofit.create(WorkDayApi::class.java)
+        GlobalScope.launch(Dispatchers.Main) {
+            val nextWorkdayCal = withContext(Dispatchers.IO){
+                val resp = api.getNextWorkday()
+                resp.workday?.date?.let {
+                    val curCal = Calendar.getInstance()
+                    curCal.timeInMillis = millSeconds
+
+                    val df = SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE)
+                    val nextWorkdayCal = Calendar.getInstance()
+                    nextWorkdayCal.time = df.parse(it)!!
+                    nextWorkdayCal.set(Calendar.HOUR_OF_DAY, curCal.get(Calendar.HOUR_OF_DAY))
+                    nextWorkdayCal.set(Calendar.MINUTE, curCal.get(Calendar.MINUTE))
+                    nextWorkdayCal.set(Calendar.SECOND, curCal.get(Calendar.SECOND))
+                    nextWorkdayCal
+                }
+            }
+            if (nextWorkdayCal != null) {
+                viewBinding!!.pmTime.text = TimeOrDateUtil.timestampToDate(nextWorkdayCal.timeInMillis)
+                block.invoke(nextWorkdayCal.timeInMillis)
+            }
         }
     }
 
