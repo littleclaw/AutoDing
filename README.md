@@ -1,6 +1,7 @@
 # AutoDing
-！！请注意，原先的包名和应用名已在作弊检测黑名单中，现已更改新包名和应用名，下载链接如下
-[APK下载地址](https://github.com/littleclaw/AutoDing/releases/tag/1.1.5) 
+！请注意，由于QQ邮箱通知将于24年11月20日关闭非加密的邮件发送，1.1.6版本及之前的APP将因此无法发送打卡通知邮件，故需要升级安装1.1.7版本之后的APP来解决此问题
+[QQ邮箱发件变动通知](img.png)
+[APK下载地址](https://github.com/littleclaw/AutoDing/releases/tag/1.1.7) 
 + 虽然更新了包名，但不能排除新包名后续又被添加到黑名单的问题，如需要完全解决此问题，需要各位自行下载源码做如下定制打包。
 1. 修改gradle中applicationId,namespace为自己的（不要用可能被判定为作弊的单词当包名）
 2. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存

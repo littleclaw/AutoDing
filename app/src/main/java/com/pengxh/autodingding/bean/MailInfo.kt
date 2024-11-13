@@ -46,7 +46,8 @@ class MailInfo {
             val p = Properties()
             p["mail.smtp.host"] = mailServerHost
             p["mail.smtp.port"] = mailServerPort
-            p["mail.smtp.auth"] = if (isValidate) "true" else "false"
+            p["mail.smtp.ssl.enable"] = "true"
+            p["mail.smtp.auth"] = "true"
             return p
         }
 }
