@@ -1,12 +1,14 @@
 # AutoDing
-！请注意，由于QQ邮箱通知将于24年11月20日关闭非加密的邮件发送，1.1.6版本及之前的APP将因此无法发送打卡通知邮件，故需要升级安装1.1.7版本之后的APP来解决此问题
-[QQ邮箱发件变动通知](img.png)
-[APK下载地址](https://github.com/littleclaw/AutoDing/releases/tag/1.1.7) 
-+ 虽然更新了包名，但不能排除新包名后续又被添加到黑名单的问题，如需要完全解决此问题，需要各位自行下载源码做如下定制打包。
-1. 修改gradle中applicationId,namespace为自己的（不要用可能被判定为作弊的单词当包名）
-2. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存
-3. 在项目gradle配置中的manifestPlaceholders中的JPUSH_APPKEY值换成上一步的appKey
-4. 在代码搜索类AuthInterceptor，替换里面的常量appKey和masterSecret
++ 目前release中的包名于24年圣诞节下午又又被加入黑名单了，为了不被再一次被加入黑名单，之后将不再提供APK包的更新，但我会详尽列出各位自行打包需要的步骤，请各位自行下载源码修改一个包名并做如下定制打包。
+1. 起一个包名，结构类似com.furry.rimet这种,修改app级build.gradle中applicationId,daoPackage的前缀为自己的（查找替换即可）
+2. 修改app/src/main/AndroidManifest.xml中包名，查找替换即可
+3. app/agconnect-services.json文件中，查找替换包名
+4. 重新进行gradle sync，完成后执行Build————Rebuild Project
+5. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存
+6. 在app级build.gradle配置中的manifestPlaceholders中的JPUSH_APPKEY值换成上一步的appKey
+7. 在代码搜索类AuthInterceptor，替换里面的常量appKey和masterSecret
+8. （可选）打包前也可修改app/src/main/res/values/strings.xml里面的app_name值，即应用名，防止应用名也被屏蔽
+9. 重新打包，然后分别装在两个手机上，配置推送regID，测试是否可发送响应指令
 -------------
 钉钉打卡，包括定时打卡和远程推送打卡,定时打卡功能是根据AutoDingDing项目修改而来，不是此项目重点，此项目主要功能在于实现远程
 打开钉钉，从而完成极速打卡，其主要是用极光推送SDK实现网络指令下发。
@@ -23,7 +25,7 @@
 
 + 请在邮件配置中尽量使用自己的qq邮箱，申请邮箱授权码的方法请上网查询，目前邮箱只支持qq邮箱，因为邮箱服务器和端口在代码里写死了，想用别的邮箱的可以找到这部分代码修改这部分设置
 -------------
-提高稳定性建议，经过数个月在两部手机上的使用，说一些提高远程打卡稳定性的建议
+可选建议
 1. 在应用权限设置里设置成允许锁屏显示，能大幅降低打卡唤醒应用时被各种不能取消的锁屏带来的干扰
 2. 在开发者模式中设置充电时不锁定屏幕，然后一直插电保持亮屏，则肯定能保证稳定运行和接收消息，可以把屏幕调到最暗来减少屏幕损耗
 
