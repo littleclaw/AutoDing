@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
+import com.azhon.appupdate.manager.DownloadManager
 import com.blankj.utilcode.util.*
 import com.gyf.immersionbar.ImmersionBar
 import com.pengxh.autodingding.AndroidxBaseActivity
@@ -17,6 +18,8 @@ import com.pengxh.autodingding.R
 import com.pengxh.autodingding.actions.DingSignAction
 import com.pengxh.autodingding.adapter.FragAdapter
 import com.pengxh.autodingding.databinding.ActivityMainBinding
+import com.pengxh.autodingding.net.RetrofitManager
+import com.pengxh.autodingding.net.api.UpdateApi
 import com.pengxh.autodingding.service.BaseAccessibilityService
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
 import com.pengxh.autodingding.ui.fragment.SettingsFragment
@@ -38,6 +41,7 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
+        checkUpdate()
     }
 
     override fun setupTopBarLayout() {
@@ -55,6 +59,27 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         execAction(intent)
         fragmentList.add(AutoDingDingFragment())
         fragmentList.add(SettingsFragment())
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun checkUpdate(){
+        launchWithExpHandler(Dispatchers.Main){
+            val version = withContext(Dispatchers.IO){
+                val api = RetrofitManager.updateClient.create(UpdateApi::class.java)
+                val versionResp = api.getVersion()
+                versionResp.data
+            }
+            DownloadManager.Builder(this@MainActivity).run {
+                apkUrl(version.apkUrl)
+                apkName("办公达人.apk")
+                smallIcon(R.mipmap.ic_launcher)
+                apkVersionCode(version.versionCode)
+                apkVersionName(version.versionName)
+                apkSize(version.apkSize)
+                apkDescription(version.description)
+                build()
+            }.download()
+        }
     }
 
     private fun execAction(intent: Intent) {
@@ -157,6 +182,7 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         }
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("moveTaskToBack(false)"))
     override fun onBackPressed() {
         moveTaskToBack(false)
     }

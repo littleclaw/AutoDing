@@ -5,7 +5,7 @@
     <!--亮屏和解锁-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="com.furry.rimet.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="us.flower.blossom.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -71,7 +71,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
-                <category android:name="com.furry.rimet" />
+                <category android:name="us.flower.blossom" />
             </intent-filter>
         </service>
         <service android:name=".service.BaseAccessibilityService"
