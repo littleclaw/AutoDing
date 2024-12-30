@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">丁丁偷懒</string>
+    <string name="app_name">上班帮手</string>
     <string name="about">
         Tips：此版本是测试版本，可能会有些问题我自测试没有发现的，有问题请发邮件给lttclaw@qq.com。建议用一台闲置的手机
         放在公司来打卡，另一台手机来推送打卡指令。基本用法只需要一台闲置手机，定好时间后会自动打开钉钉，完成极速打卡；进阶用法

@@ -6,18 +6,14 @@ buildscript {
         maven { url 'https://jitpack.io' }
         maven { url "https://maven.aliyun.com/repository/public" }
         maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'http://developer.huawei.com/repo/'
-            allowInsecureProtocol = true}
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.android.tools.build:gradle:8.4.2'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.1'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        // hms
-        classpath 'com.huawei.agconnect:agcp:1.9.1.301'
     }
 }
 

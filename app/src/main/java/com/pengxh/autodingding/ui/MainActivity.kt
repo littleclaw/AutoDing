@@ -10,7 +10,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
-import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.CacheDiskUtils
+import com.blankj.utilcode.util.ImageUtils
+import com.blankj.utilcode.util.IntentUtils
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ScreenUtils
+import com.blankj.utilcode.util.TimeUtils
 import com.gyf.immersionbar.ImmersionBar
 import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.R
@@ -20,11 +25,21 @@ import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.service.BaseAccessibilityService
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
 import com.pengxh.autodingding.ui.fragment.SettingsFragment
-import com.pengxh.autodingding.utils.*
+import com.pengxh.autodingding.utils.AccessibilityUtil
+import com.pengxh.autodingding.utils.Constant
+import com.pengxh.autodingding.utils.MailSender
+import com.pengxh.autodingding.utils.SendMailUtil
 import com.pengxh.autodingding.utils.SendMailUtil.createMail
 import com.pengxh.autodingding.utils.SendMailUtil.send
+import com.pengxh.autodingding.utils.StatusBarColorUtil
 import com.pengxh.autodingding.utils.Utils
-import kotlinx.coroutines.*
+import com.pengxh.autodingding.utils.launchWithExpHandler
+import com.pengxh.autodingding.utils.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
 class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
@@ -157,6 +172,7 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         }
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("moveTaskToBack(false)"))
     override fun onBackPressed() {
         moveTaskToBack(false)
     }

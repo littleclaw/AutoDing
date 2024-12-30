@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitManager {
     private const val BASE_URL ="https://api.jpush.cn"
     private const val API_DAY_URL = "http://timor.tech"
+    private const val UPDATE_BASE_URL = "http://smallfurrypaw.top"
 
     lateinit var okHttpClient: OkHttpClient
 
@@ -24,6 +25,14 @@ object RetrofitManager {
         get() {
             return Retrofit.Builder()
                 .baseUrl(API_DAY_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(generateWorkdayClient())
+                .build()
+        }
+    val updateClient: Retrofit
+        get(){
+            return Retrofit.Builder()
+                .baseUrl(UPDATE_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(generateWorkdayClient())
                 .build()
@@ -52,7 +61,7 @@ object RetrofitManager {
             .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
             .readTimeout(10_000, TimeUnit.MILLISECONDS)
             .writeTimeout(30_000, TimeUnit.MILLISECONDS)
-            .retryOnConnectionFailure(true)
+            .retryOnConnectionFailure(false)
             .addInterceptor(httpLoggingInterceptor)
             .build()
     }

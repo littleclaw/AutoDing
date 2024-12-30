@@ -23,7 +23,6 @@ import com.pengxh.autodingding.utils.Constant
 import com.pengxh.autodingding.utils.Utils
 import com.pengxh.autodingding.utils.launchWithExpHandler
 import com.pengxh.autodingding.utils.toast
-import com.tencent.bugly.beta.Beta
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Job
 
@@ -139,7 +138,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
                     .commit()
             }
             R.id.rlVersion -> {
-                Beta.checkUpgrade()
+                // undone
             }
             R.id.testLayout -> {
                 val action = DingSignAction()

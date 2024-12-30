@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.LogUtils
 import com.pengxh.autodingding.ApiException
 import com.pengxh.autodingding.BuildConfig
-import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.*
 import org.json.JSONException
 import retrofit2.HttpException
@@ -50,7 +49,6 @@ open class BaseViewModel: ViewModel() {
                 block()
             }.onFailure {
                 it.printStackTrace()
-                CrashReport.postCatchedException(it)
                 getApiException(it).apply {
                     withContext(Dispatchers.Main){
                         error?.invoke(this@apply)
@@ -67,8 +65,6 @@ open class BaseViewModel: ViewModel() {
             }.onFailure {
                 if (BuildConfig.DEBUG) {
                     it.printStackTrace()
-                }else{
-                    CrashReport.postCatchedException(it)
                 }
                 getApiException(it).apply {
                     withContext(Dispatchers.Main){

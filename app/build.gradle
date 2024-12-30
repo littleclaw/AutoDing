@@ -3,17 +3,16 @@ plugins {
     id 'org.greenrobot.greendao'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.huawei.agconnect'
 }
 
 android {
     compileSdk 33
     defaultConfig {
-        applicationId "com.furry.rimet"
+        applicationId "xcom.warof.chosen"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 17
-        versionName "1.1.7"
+        versionCode 18
+        versionName "1.1.8"
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
@@ -22,7 +21,7 @@ android {
 
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY : "a4d990120558f6f599084ee0", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_APPKEY : "f01b8a02b66ea2d632e52e2e", //JPush 上注册的包名对应的 Appkey.
                 JPUSH_CHANNEL : "jpush", //暂时填写默认值即可.
                 VERSION_NAME : versionName,
                 CHANNEL : 'self',
@@ -72,19 +71,23 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
     }
 
     greendao {
         schemaVersion 1//数据库版本号
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
-        daoPackage 'com.furry.rimet.greendao'//设置DaoMaster、DaoSession、Dao包名
+        daoPackage 'xcom.warof.chosen.greendao'//设置DaoMaster、DaoSession、Dao包名
     }
 
     buildFeatures {
         viewBinding true
         dataBinding true
+        buildConfig true
     }
     namespace 'com.pengxh.autodingding'
     lint {
@@ -147,10 +150,6 @@ dependencies {
     implementation "com.blankj:utilcodex:1.30.5"
     implementation 'cn.jiguang.sdk:jpush:5.2.2'
     implementation 'cn.jiguang.sdk:joperate:2.0.2'
-    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    // 接入华为厂商
-    implementation 'com.huawei.hms:push:6.3.0.304'
-    implementation 'cn.jiguang.sdk.plugin:huawei:4.8.1'
     //无障碍
     implementation 'com.github.Krosxx:Android-Auto-Api:4.1.2'
 

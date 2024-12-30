@@ -5,7 +5,7 @@
     <!--亮屏和解锁-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="com.furry.rimet.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="xcom.warof.chosen.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -43,11 +43,6 @@
             android:screenOrientation="unspecified" />
         <activity android:name=".ui.HistoryRecordActivity" />
 
-        <activity
-            android:name="com.tencent.bugly.beta.ui.BetaActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|locale"
-            android:theme="@android:style/Theme.Translucent" />
-
         <service
             android:name=".service.NotificationMonitorService"
             android:enabled="true"
@@ -71,7 +66,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
-                <category android:name="com.furry.rimet" />
+                <category android:name="xcom.warof.chosen" />
             </intent-filter>
         </service>
         <service android:name=".service.BaseAccessibilityService"
@@ -105,19 +100,5 @@
                 <action android:name="android.intent.action.BATTERY_OKAY"/>
             </intent-filter>
         </receiver>
-
-        <!-- 配置bugly相关参数 -->
-        <meta-data
-            android:name="BUGLY_APPID"
-            android:value="84a0dd7960" />
-        <meta-data
-            android:name="BUGLY_APP_VERSION"
-            android:value="${VERSION_NAME}" />
-        <meta-data
-            android:name="BUGLY_APP_CHANNEL"
-            android:value="${CHANNEL}" />
-        <meta-data
-            android:name="BUGLY_ENABLE_DEBUG"
-            android:value="${DEBUG}" />
     </application>
 </manifest>

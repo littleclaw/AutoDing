@@ -1,4 +1,4 @@
-package com.furry.rimet.greendao;
+package xcom.warof.chosen.greendao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;

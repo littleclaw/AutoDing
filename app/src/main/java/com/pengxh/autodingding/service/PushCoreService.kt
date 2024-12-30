@@ -3,6 +3,7 @@ package com.pengxh.autodingding.service
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
@@ -11,7 +12,9 @@ import cn.jpush.android.api.CustomMessage
 import cn.jpush.android.api.JPushInterface
 import cn.jpush.android.service.JPushMessageService
 import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.CacheDiskUtils
+import com.blankj.utilcode.util.DeviceUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.AndroidxBaseActivity
@@ -56,8 +59,13 @@ class PushCoreService : JPushMessageService() {
             val curBattery = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)///当前电量百分比
             val regId = JPushInterface.getRegistrationID(context)
             val screenLock = ScreenUtils.isScreenLock()
+            val androidAPI = Build.VERSION.SDK_INT
+            val manufacturer = Build.MANUFACTURER
+            val model = DeviceUtils.getModel()
+            val appInfo = AppUtils.getAppInfo()
             val message = "注册ID: $regId ${if (screenLock) "是" else "未"}锁屏 " +
-                    "当前${if (charging) "正在" else "未"}充电： 当前电量百分比：$curBattery %"
+                    "当前${if (charging) "正在" else "未"}充电： 当前电量百分比：$curBattery %," +
+                    "安卓版本:${androidAPI}, 厂商:${manufacturer},型号：${model}, 应用版本${appInfo.versionName}"
             SendMailUtil.send(emailAddress, message)
         } else if (MSG_SCREEN_SHOT == customMessage.message){
             wakePhone(context)
@@ -80,6 +88,7 @@ class PushCoreService : JPushMessageService() {
         super.onMessage(context, customMessage)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun wakePhone(context: Context){
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val screenOn = powerManager.isInteractive
@@ -87,11 +96,16 @@ class PushCoreService : JPushMessageService() {
             //唤醒屏幕
             Log.d(TAG, "screen off, now waking up phone")
             val wakeLock = powerManager.newWakeLock(
-                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+                PowerManager.PARTIAL_WAKE_LOCK,
                 "autoDing:bright"
             )
             wakeLock.acquire(10000)
-            wakeLock.release()
+            launchWithExpHandler {
+                withContext(Dispatchers.IO){
+                    delay(50000)
+                    wakeLock.release()
+                }
+            }
         }
     }
 
@@ -109,11 +123,13 @@ class PushCoreService : JPushMessageService() {
                     override fun onDismissError() {
                         Log.d("unlock", "error")
                         ToastUtils.showShort("解锁错误")
-                        launchWithExpHandler {
-                            SwipeUnlockAction().run(ActivityUtils.getTopActivity())
-                            delay(3000)
-                            callback.invoke()
-                        }
+                        val emailAddress = Utils.readEmailAddress()
+                        SendMailUtil.send(emailAddress, "解锁手机异常，可能手机未设置锁屏显示，导致手机收到了消息但无法正常唤醒手机锁屏");
+//                        launchWithExpHandler {
+//                            SwipeUnlockAction().run(ActivityUtils.getTopActivity())
+//                            delay(3000)
+//                            callback.invoke()
+//                        }
                     }
 
                     override fun onDismissCancelled() {
@@ -124,6 +140,7 @@ class PushCoreService : JPushMessageService() {
             }else{
                 Log.d("unlock", "old version dismiss function")
                 keyGuardManager.newKeyguardLock("dismiss").disableKeyguard()
+                callback.invoke()
             }
         }else{
             callback.invoke()

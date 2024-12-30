@@ -2,7 +2,6 @@ package com.pengxh.autodingding
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import cn.vove7.andro_accessibility_api.AccessibilityApi
 import com.blankj.utilcode.util.CacheDiskUtils
@@ -12,7 +11,6 @@ import com.pengxh.autodingding.greendao.DaoSession
 import com.pengxh.autodingding.service.BaseAccessibilityService
 import com.pengxh.autodingding.service.GestureService
 import com.pengxh.autodingding.utils.Utils
-import com.tencent.bugly.Bugly
 
 class BaseApplication : Application() {
     override fun onCreate() {
@@ -26,11 +24,7 @@ class BaseApplication : Application() {
         strings.add("main")
         JPushInterface.setTags(this, 0, strings)
         val pushRegId = JPushInterface.getRegistrationID(this)
-        Log.d("push", pushRegId)
         CacheDiskUtils.getInstance().put("pushRegId", pushRegId)
-
-        //Bugly初使化
-        Bugly.init(this, "84a0dd7960", false)
 
         //辅助服务
         AccessibilityApi.apply {
