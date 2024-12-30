@@ -105,19 +105,5 @@
                 <action android:name="android.intent.action.BATTERY_OKAY"/>
             </intent-filter>
         </receiver>
-
-        <!-- 配置bugly相关参数 -->
-        <meta-data
-            android:name="BUGLY_APPID"
-            android:value="84a0dd7960" />
-        <meta-data
-            android:name="BUGLY_APP_VERSION"
-            android:value="${VERSION_NAME}" />
-        <meta-data
-            android:name="BUGLY_APP_CHANNEL"
-            android:value="${CHANNEL}" />
-        <meta-data
-            android:name="BUGLY_ENABLE_DEBUG"
-            android:value="${DEBUG}" />
     </application>
 </manifest>

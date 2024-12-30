@@ -3,7 +3,6 @@ plugins {
     id 'org.greenrobot.greendao'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.huawei.agconnect'
 }
 
 android {
@@ -151,11 +150,7 @@ dependencies {
     implementation "com.blankj:utilcodex:1.30.5"
     implementation 'cn.jiguang.sdk:jpush:5.2.2'
     implementation 'cn.jiguang.sdk:joperate:2.0.2'
-    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'io.github.azhon:appupdate:4.3.6'
-    // 接入华为厂商
-    implementation 'com.huawei.hms:push:6.3.0.304'
-    implementation 'cn.jiguang.sdk.plugin:huawei:4.8.1'
     //无障碍
     implementation 'com.github.Krosxx:Android-Auto-Api:4.1.2'
 
