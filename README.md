@@ -2,13 +2,12 @@
 + 目前release中的包名于24年圣诞节下午又又被加入黑名单了，为了不被再一次被加入黑名单，之后将不再提供APK包的更新，但我会详尽列出各位自行打包需要的步骤，请各位自行下载源码修改一个包名并做如下定制打包。
 1. 起一个包名，结构类似com.furry.rimet这种,修改app级build.gradle中applicationId,daoPackage的前缀为自己的（查找替换即可）
 2. 修改app/src/main/AndroidManifest.xml中包名，查找替换即可
-3. app/agconnect-services.json文件中，查找替换包名
-4. 重新进行gradle sync，完成后执行Build————Rebuild Project
-5. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存
-6. 在app级build.gradle配置中的manifestPlaceholders中的JPUSH_APPKEY值换成上一步的appKey
-7. 在代码搜索类AuthInterceptor，替换里面的常量appKey和masterSecret
-8. （可选）打包前也可修改app/src/main/res/values/strings.xml里面的app_name值，即应用名，防止应用名也被屏蔽
-9. 重新打包，然后分别装在两个手机上，配置推送regID，测试是否可发送响应指令
+3. 重新进行gradle sync，完成后执行Build————Rebuild Project
+4. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存
+5. 在app级build.gradle配置中的manifestPlaceholders中的JPUSH_APPKEY值换成上一步的appKey
+6. 在代码搜索类AuthInterceptor，替换里面的常量appKey和masterSecret
+7. （可选）打包前也可修改app/src/main/res/values/strings.xml里面的app_name值，即应用名，防止应用名也被屏蔽
+8. 重新打包，然后分别装在两个手机上，配置推送regID，测试是否可发送响应指令
 -------------
 钉钉打卡，包括定时打卡和远程推送打卡,定时打卡功能是根据AutoDingDing项目修改而来，不是此项目重点，此项目主要功能在于实现远程
 打开钉钉，从而完成极速打卡，其主要是用极光推送SDK实现网络指令下发。
