@@ -42,12 +42,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="unspecified" />
         <activity android:name=".ui.HistoryRecordActivity" />
-
-        <activity
-            android:name="com.tencent.bugly.beta.ui.BetaActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|locale"
-            android:theme="@android:style/Theme.Translucent" />
-
         <service
             android:name=".service.NotificationMonitorService"
             android:enabled="true"

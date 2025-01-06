@@ -36,7 +36,7 @@ open class PushFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         pushVM.pushResult.observe(viewLifecycleOwner){
-            if (it.errorCode == 0){
+            if (it!!.errorCode == 0){
                 ToastUtils.showShort("指令下发成功")
                 saveRegId()
             }else{
@@ -86,6 +86,9 @@ open class PushFragment : Fragment() {
             } else {
                 pushVM.pushManualSign(binding!!.etTargetRegId.text.toString())
             }
+        }
+        binding!!.btnMailPeriodicLog.clickNoRepeat(2000) {
+            pushVM.pushMailPeriodicLog(binding!!.etTargetRegId.text.toString())
         }
 
     }

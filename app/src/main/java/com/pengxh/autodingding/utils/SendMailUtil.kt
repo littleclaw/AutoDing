@@ -7,7 +7,7 @@ import java.io.File
 
 object SendMailUtil {
     fun send(
-        toAddress: String?, emailMessage: String
+        toAddress: String?, emailMessage: String, subject: String="自动打卡通知"
     ) {
         Thread {
             MailSender().sendTextMail(
@@ -15,7 +15,8 @@ object SendMailUtil {
                     toAddress,
                     emailMessage,
                     CacheDiskUtils.getInstance().getString("senderEmail", "lttclaw@qq.com"),
-                    CacheDiskUtils.getInstance().getString("senderAuth", "hwpzapzrkmgpgaba")
+                    CacheDiskUtils.getInstance().getString("senderAuth", "hwpzapzrkmgpgaba"),
+                    subject
                 )
             )
         }
@@ -43,7 +44,8 @@ object SendMailUtil {
         toAddress: String?,
         emailMessage: String,
         senderEmail: String = "lttclaw@qq.com",
-        senderAuth: String = "hwpzapzrkmgpgaba"
+        senderAuth: String = "hwpzapzrkmgpgaba",
+        subject: String = "自动打卡通知"
     ): MailInfo {
         val mailInfo = MailInfo()
         mailInfo.mailServerHost = "smtp.qq.com" //发送方邮箱服务器
@@ -53,7 +55,7 @@ object SendMailUtil {
         mailInfo.password = senderAuth //邮箱授权码，不是密码
         mailInfo.toAddress = toAddress // 接收者邮箱
         mailInfo.fromAddress = senderEmail // 发送者邮箱
-        mailInfo.subject = "自动打卡通知" // 邮件主题
+        mailInfo.subject = subject // 邮件主题
         if (emailMessage == "") {
             mailInfo.content =
                 "未监听到打卡成功的通知，请手动登录检查" + TimeOrDateUtil.timestampToDate(System.currentTimeMillis()) // 邮件文本

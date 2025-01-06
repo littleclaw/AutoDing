@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 35
     defaultConfig {
         applicationId "us.flower.blossom"
         minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 18
-        versionName "1.1.8"
+        targetSdkVersion 35
+        versionCode 19
+        versionName "1.1.9"
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
@@ -145,6 +145,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:3.2.1'
     //fragment快速实现
     implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+    implementation "androidx.work:work-runtime-ktx:2.10.0"
     //数据库框架
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation "com.blankj:utilcodex:1.30.5"

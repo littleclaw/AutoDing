@@ -9,6 +9,10 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.azhon.appupdate.manager.DownloadManager
 import com.blankj.utilcode.util.*
@@ -21,6 +25,7 @@ import com.pengxh.autodingding.databinding.ActivityMainBinding
 import com.pengxh.autodingding.net.RetrofitManager
 import com.pengxh.autodingding.net.api.UpdateApi
 import com.pengxh.autodingding.service.BaseAccessibilityService
+import com.pengxh.autodingding.service.WakeUpWorker
 import com.pengxh.autodingding.ui.fragment.AutoDingDingFragment
 import com.pengxh.autodingding.ui.fragment.SettingsFragment
 import com.pengxh.autodingding.utils.*
@@ -29,6 +34,7 @@ import com.pengxh.autodingding.utils.SendMailUtil.send
 import com.pengxh.autodingding.utils.Utils
 import kotlinx.coroutines.*
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     private var menuItem: MenuItem? = null
@@ -42,6 +48,7 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
         checkUpdate()
+        startPeriodicWork()
     }
 
     override fun setupTopBarLayout() {
@@ -62,9 +69,9 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun checkUpdate(){
-        launchWithExpHandler(Dispatchers.Main){
-            val version = withContext(Dispatchers.IO){
+    private fun checkUpdate() {
+        launchWithExpHandler(Dispatchers.Main) {
+            val version = withContext(Dispatchers.IO) {
                 val api = RetrofitManager.updateClient.create(UpdateApi::class.java)
                 val versionResp = api.getVersion()
                 versionResp.data
@@ -80,6 +87,23 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 build()
             }.download()
         }
+    }
+
+    private fun startPeriodicWork() {
+        val periodicWorkRequest =
+            PeriodicWorkRequest.Builder(
+                WakeUpWorker::class.java,
+                1,
+                TimeUnit.HOURS,
+                10,
+                TimeUnit.MINUTES
+            )
+                .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "wakeAndLog",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            periodicWorkRequest
+        )
     }
 
     private fun execAction(intent: Intent) {
@@ -141,6 +165,11 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 val emailMessage = dingAction.message.toString()
                 MailSender().sendTextMail(createMail(emailAddress, emailMessage))
             }
+        } else if (ACTION_PERIODIC_WAKE == action) {
+            val line = "定时唤醒成功"
+            val sp = SPUtils.getInstance()
+            val logTxt = sp.getString(WakeUpWorker.SP_KEY, "")
+            sp.put(WakeUpWorker.SP_KEY, "${logTxt}${TimeUtils.getNowString()}:${line}\n\n")
         }
     }
 
@@ -193,5 +222,6 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
         const val ACTION_LAUNCH_DING = "launchDing"
         const val ACTION_SCREENSHOT = "screenShot"
         const val ACTION_MANUAL_SIGN = "manualSign"
+        const val ACTION_PERIODIC_WAKE = "periodicWake"
     }
 }

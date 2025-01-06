@@ -23,6 +23,7 @@
             android:id="@+id/ivBack"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/back"
             android:padding="15dp"
             android:src="@drawable/svg_back"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -32,8 +33,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="推送设置"
+            android:layout_marginStart="10dp"
+            android:text="@string/push_setting"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +49,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:layout_marginTop="8dp"
-        android:hint="输入推送目标的注册id"
+        android:hint="@string/input_regId"
         style="@style/Widget.AppCompat.EditText"
         app:layout_constraintTop_toBottomOf="@id/clHeader"/>
 
@@ -109,4 +110,15 @@
         app:layout_constraintTop_toBottomOf="@id/tvTest"
         android:backgroundTint="#F00"
         android:text="推送辅助手动打卡指令(测试功能)"/>
+    <Button
+        android:id="@+id/btnMailPeriodicLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+        app:layout_constraintTop_toBottomOf="@id/btnManualSign"
+        android:backgroundTint="@color/colorAppThemeLight"
+        android:text="@string/mail_periodic_log"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

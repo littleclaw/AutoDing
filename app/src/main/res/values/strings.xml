@@ -21,4 +21,8 @@
     <string name="base_ser_desc">远程启钉基础辅助服务</string>
     <string name="ges_ser_desc">远程启钉手势服务</string>
     <string name="fore_service">前台服务</string>
+    <string name="mail_periodic_log">获取定时唤醒日志</string>
+    <string name="back">BACK</string>
+    <string name="push_setting">推送设置</string>
+    <string name="input_regId">输入推送目标的注册id</string>
 </resources>

@@ -3,6 +3,7 @@ package com.pengxh.autodingding.ui.fragment
 import androidx.lifecycle.MutableLiveData
 import cn.jpush.android.api.JPushInterface
 import com.blankj.utilcode.util.CacheDiskUtils
+import com.blankj.utilcode.util.LogUtils
 import com.pengxh.autodingding.base.BaseViewModel
 import com.pengxh.autodingding.bean.BodyMsg
 import com.pengxh.autodingding.bean.PushAudience
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PushVM: BaseViewModel() {
-    val pushResult = MutableLiveData<PushResp>()
+    val pushResult = MutableLiveData<PushResp?>()
 
     fun pushCheck(regId:String) {
         pushCmd(regId, PushCoreService.MSG_MAIL_CHECK)
@@ -37,6 +38,10 @@ class PushVM: BaseViewModel() {
         pushCmd(regId, PushCoreService.MSG_MANUAL_SIGN)
     }
 
+    fun pushMailPeriodicLog(regId: String){
+        pushCmd(regId, PushCoreService.MSG_WAKE_LOG)
+    }
+
     private fun pushCmd(regId: String, cmd: String) = launch {
         pushResult.value = withContext(Dispatchers.IO){
             val api = RetrofitManager.retrofitClient.create(PushApi::class.java)
@@ -48,6 +53,7 @@ class PushVM: BaseViewModel() {
                 msg_content = cmd
                 title = CacheDiskUtils.getInstance().getString("pushRegId")
             }
+            LogUtils.d("push, regId:${regId}, cmd:${cmd}")
             api.pushMsg(pushMessage)
         }
     }
