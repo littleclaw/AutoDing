@@ -9,10 +9,10 @@ android {
     compileSdk 35
     defaultConfig {
         applicationId "us.flower.blossom"
-        minSdkVersion 23
+        minSdkVersion 27
         targetSdkVersion 35
-        versionCode 19
-        versionName "1.1.9"
+        versionCode 21
+        versionName "1.2.1"
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'

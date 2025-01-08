@@ -4,6 +4,9 @@
 
     <!--亮屏和解锁-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.TURN_SCREEN_ON" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="us.flower.blossom.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -39,9 +42,11 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="unspecified" />
+            android:launchMode="singleTask" />
         <activity android:name=".ui.HistoryRecordActivity" />
+        <service android:name=".service.KeepOnService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" />
         <service
             android:name=".service.NotificationMonitorService"
             android:enabled="true"

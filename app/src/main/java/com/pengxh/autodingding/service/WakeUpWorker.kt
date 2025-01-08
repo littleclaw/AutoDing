@@ -52,17 +52,10 @@ class WakeUpWorker(context: Context, workerParams: WorkerParameters) : Worker(co
         if (!screenOn) {
             //唤醒屏幕
             writeLog("屏幕关闭，唤醒屏幕")
-            val wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
+            val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "autoDing:bright"
             )
-            wakeLock.acquire(10000)
-            launchWithExpHandler {
-                withContext(Dispatchers.IO){
-                    delay(50000)
-                    wakeLock.release()
-                }
-            }
+            wakeLock.acquire(50000)
         }
     }
 }

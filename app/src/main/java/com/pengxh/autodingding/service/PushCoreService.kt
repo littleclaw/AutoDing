@@ -3,7 +3,6 @@ package com.pengxh.autodingding.service
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
@@ -19,7 +18,6 @@ import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.pengxh.autodingding.AndroidxBaseActivity
-import com.pengxh.autodingding.actions.SwipeUnlockAction
 import com.pengxh.autodingding.bean.BodyMsg
 import com.pengxh.autodingding.bean.PushAudience
 import com.pengxh.autodingding.bean.PushMessage
@@ -31,7 +29,6 @@ import com.pengxh.autodingding.utils.Utils
 import com.pengxh.autodingding.utils.launchWithExpHandler
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class PushCoreService : JPushMessageService() {
@@ -93,7 +90,6 @@ class PushCoreService : JPushMessageService() {
         super.onMessage(context, customMessage)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun wakePhone(context: Context) {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val screenOn = powerManager.isInteractive
@@ -101,16 +97,10 @@ class PushCoreService : JPushMessageService() {
             //唤醒屏幕
             Log.d(TAG, "screen off, now waking up phone")
             val wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "autoDing:bright"
             )
-            wakeLock.acquire(10000)
-            launchWithExpHandler {
-                withContext(Dispatchers.IO) {
-                    delay(50000)
-                    wakeLock.release()
-                }
-            }
+            wakeLock.acquire(50000)
         }
     }
 
