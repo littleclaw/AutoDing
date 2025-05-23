@@ -9,11 +9,6 @@ import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.pengxh.autodingding.BaseApplication
 import com.pengxh.autodingding.ui.MainActivity
-import com.pengxh.autodingding.utils.launchWithExpHandler
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 class WakeUpWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     companion object{
@@ -23,12 +18,14 @@ class WakeUpWorker(context: Context, workerParams: WorkerParameters) : Worker(co
         checkLog()
         writeLog("开始执行定时唤醒")
         BaseApplication.application?.let {
-            wakePhone(it.baseContext)
-            val intent = Intent(it, MainActivity::class.java)
+            wakePhone(it.applicationContext)
+            val intent = Intent(it.applicationContext, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_PERIODIC_WAKE)
             it.startActivity(intent)
             return Result.success()
         }
+        writeLog("执行定时唤醒失败，应用实例不可用")
         return Result.failure()
     }
 
@@ -45,7 +42,6 @@ class WakeUpWorker(context: Context, workerParams: WorkerParameters) : Worker(co
         sp.put(SP_KEY, "${logTxt}${TimeUtils.getNowString()}:${line}\n")
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun wakePhone(context: Context){
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val screenOn = powerManager.isInteractive
@@ -53,9 +49,9 @@ class WakeUpWorker(context: Context, workerParams: WorkerParameters) : Worker(co
             //唤醒屏幕
             writeLog("屏幕关闭，唤醒屏幕")
             val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                "autoDing:bright"
+                "autoDing:period:"+System.currentTimeMillis()
             )
-            wakeLock.acquire(50000)
+            wakeLock.acquire(60 * 60 * 1000)
         }
     }
 }

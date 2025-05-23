@@ -94,9 +94,9 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
     //切换通知监听器服务
     private fun startNotificationMonitorService() {
         //创建常住通知栏
-//        Utils.createNotification()
-        val intent = Intent(requireContext(), KeepOnService::class.java)
-        requireActivity().startForegroundService(intent)
+        Utils.createNotification()
+//        val intent = Intent(requireContext(), KeepOnService::class.java)
+//        requireActivity().startForegroundService(intent)
 
         val pm = requireContext().packageManager
         pm.setComponentEnabledSetting(
@@ -115,13 +115,13 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
             val powerManager = requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "bright::always")
             wakeLock!!.acquire(3*24*60*60*1000L /*1day*/)
-            viewBinding!!.tvLockState.text = "是"
+            viewBinding!!.tvLockState.text = "开"
         } else if(wakeLock!!.isHeld){
             wakeLock!!.release()
-            viewBinding!!.tvLockState.text = "否"
+            viewBinding!!.tvLockState.text = "关"
         }else{
             wakeLock!!.acquire(3*24*60*60*1000L /*1day*/)
-            viewBinding!!.tvLockState.text = "是"
+            viewBinding!!.tvLockState.text = "开"
         }
     }
 

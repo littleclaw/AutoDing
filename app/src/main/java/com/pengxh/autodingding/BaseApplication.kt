@@ -35,7 +35,7 @@ class BaseApplication : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        application = this;
+        application = this
     }
 
     private fun initDataBase() {

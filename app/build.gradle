@@ -11,8 +11,8 @@ android {
         applicationId "us.flower.blossom"
         minSdkVersion 27
         targetSdkVersion 35
-        versionCode 21
-        versionName "1.2.1"
+        versionCode 22
+        versionName "1.2.2"
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
@@ -93,6 +93,10 @@ android {
     lint {
         checkReleaseBuilds false
     }
+    packagingOptions {
+        doNotStrip '*/mips/*.so'
+        doNotStrip '*/mips64/*.so'
+    }
 }
 
 tasks.configureEach { task ->
@@ -149,8 +153,7 @@ dependencies {
     //数据库框架
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation "com.blankj:utilcodex:1.30.5"
-    implementation 'cn.jiguang.sdk:jpush:5.2.2'
-    implementation 'cn.jiguang.sdk:joperate:2.0.2'
+    implementation 'cn.jiguang.sdk:jpush:5.5.3'
     implementation 'io.github.azhon:appupdate:4.3.6'
     //无障碍
     implementation 'com.github.Krosxx:Android-Auto-Api:4.1.2'

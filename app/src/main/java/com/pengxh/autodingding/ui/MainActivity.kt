@@ -11,11 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.Operation
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.azhon.appupdate.manager.DownloadManager
 import com.blankj.utilcode.util.*
+import com.drake.channel.receiveEvent
 import com.gyf.immersionbar.ImmersionBar
 import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.R
@@ -47,6 +50,20 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
+        receiveEvent<String> {
+            val intent = Intent(this@MainActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            val emailAddress = Utils.readEmailAddress()
+            if (emailAddress == "") {
+                Log.d("receive event", "邮箱地址为空")
+                ToastUtils.showShort("收件邮箱未设置")
+            } else {
+                if (it.isNotEmpty()){
+                    send(emailAddress, it)
+                }
+            }
+        }
         checkUpdate()
         startPeriodicWork()
     }
@@ -95,15 +112,19 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 WakeUpWorker::class.java,
                 1,
                 TimeUnit.HOURS,
-                10,
+                5,
                 TimeUnit.MINUTES
             )
                 .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+        val manager = WorkManager.getInstance(this)
+        val operation = manager.enqueueUniquePeriodicWork(
             "wakeAndLog",
-            ExistingPeriodicWorkPolicy.UPDATE,
+            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
             periodicWorkRequest
         )
+        operation.state.observe(this){
+            LogUtils.d(it.toString())
+        }
     }
 
     private fun execAction(intent: Intent) {

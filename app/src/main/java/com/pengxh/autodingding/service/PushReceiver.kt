@@ -1,4 +1,4 @@
-package com.pengxh.autodingding.service
+﻿package com.pengxh.autodingding.service
 
 import android.app.KeyguardManager
 import android.content.Context
@@ -9,7 +9,7 @@ import android.os.PowerManager
 import android.util.Log
 import cn.jpush.android.api.CustomMessage
 import cn.jpush.android.api.JPushInterface
-import cn.jpush.android.service.JPushMessageService
+import cn.jpush.android.service.JPushMessageReceiver
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.CacheDiskUtils
@@ -31,7 +31,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PushCoreService : JPushMessageService() {
+class PushReceiver: JPushMessageReceiver() {
     override fun onMessage(context: Context, customMessage: CustomMessage) {
         Log.d(TAG, customMessage.message)
         val intent = Intent(context, MainActivity::class.java)

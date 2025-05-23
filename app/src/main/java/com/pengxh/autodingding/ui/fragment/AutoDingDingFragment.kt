@@ -1,40 +1,29 @@
 package com.pengxh.autodingding.ui.fragment
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
-import com.blankj.utilcode.constant.TimeConstants
-import com.blankj.utilcode.util.CacheDiskUtils
-import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.drake.channel.receiveEvent
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
 import com.pengxh.autodingding.AndroidxBaseFragment
 import com.pengxh.autodingding.R
-import com.pengxh.autodingding.bean.BodyMsg
-import com.pengxh.autodingding.bean.PushAudience
-import com.pengxh.autodingding.bean.PushMessage
 import com.pengxh.autodingding.databinding.FragmentDayBinding
 import com.pengxh.autodingding.net.RetrofitManager
-import com.pengxh.autodingding.net.api.PushApi
 import com.pengxh.autodingding.net.api.WorkDayApi
-import com.pengxh.autodingding.service.PushCoreService
-import com.pengxh.autodingding.ui.WelcomeActivity
 import com.pengxh.autodingding.utils.Constant
-import com.pengxh.autodingding.utils.SendMailUtil
 import com.pengxh.autodingding.utils.TimeOrDateUtil
 import com.pengxh.autodingding.utils.Utils
-import com.pengxh.autodingding.utils.launchWithExpHandler
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 
 class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.OnClickListener {
     private var amCountDownTimer: CountDownTimer? = null
@@ -55,21 +44,7 @@ class AutoDingDingFragment : AndroidxBaseFragment<FragmentDayBinding?>(), View.O
         viewBinding!!.endLayoutView.setOnClickListener(this)
         viewBinding!!.endAmDuty.setOnClickListener(this)
         viewBinding!!.endPmDuty.setOnClickListener(this)
-        receiveEvent<String> {
-            val intent = Intent(context, WelcomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            context?.startActivity(intent)
-            val emailAddress = Utils.readEmailAddress()
-            if (emailAddress == "") {
-                Log.d("receive event", "邮箱地址为空")
-                ToastUtils.showShort("收件邮箱未设置")
-            } else {
-                if (it.isNotEmpty()){
-                    SendMailUtil.send(emailAddress, it)
-                }
-            }
 
-        }
     }
 
     override fun initEvent() {}

@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <queries>
         <package android:name="com.alibaba.android.rimet"/>
     </queries>
@@ -65,14 +66,14 @@
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
         </service>
-        <service android:name=".service.PushCoreService"
+        <receiver android:name=".service.PushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
+                <action android:name="cn.jpush.android.intent.RECEIVER_MESSAGE" />
                 <category android:name="us.flower.blossom" />
             </intent-filter>
-        </service>
+        </receiver>
         <service android:name=".service.BaseAccessibilityService"
             android:description="@string/base_ser_desc"
             android:label="@string/base_ser_desc"

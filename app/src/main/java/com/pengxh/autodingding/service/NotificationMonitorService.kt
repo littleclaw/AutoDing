@@ -2,16 +2,14 @@ package com.pengxh.autodingding.service
 
 import android.app.Notification
 import android.content.ComponentName
-import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.drake.channel.sendEvent
 import com.pengxh.autodingding.BaseApplication
 import com.pengxh.autodingding.bean.HistoryRecordBean
 import com.pengxh.autodingding.greendao.HistoryRecordBeanDao
-import com.pengxh.autodingding.ui.fragment.SettingsFragment
 import com.pengxh.autodingding.utils.TimeOrDateUtil
-import java.util.*
+import java.util.UUID
 
 class NotificationMonitorService : NotificationListenerService() {
     private var recordBeanDao: HistoryRecordBeanDao? = null
@@ -38,13 +36,13 @@ class NotificationMonitorService : NotificationListenerService() {
             }
             if (notificationText.contains("考勤打卡")) {
                 //保存打卡记录
+                sendEvent(notificationText)
                 val bean = HistoryRecordBean()
                 bean.uuid = UUID.randomUUID().toString()
                 bean.date = TimeOrDateUtil.timestampToDate(System.currentTimeMillis())
                 bean.message = notificationText
                 recordBeanDao!!.save(bean)
                 //通知发送邮件和更新界面
-                sendEvent(notificationText)
             }
         }else if(packageName == "com.pengxh.autodingding"){
             if (notificationText == null || notificationText == "") {
@@ -61,9 +59,7 @@ class NotificationMonitorService : NotificationListenerService() {
      */
     override fun onNotificationRemoved(sbn: StatusBarNotification) {}
     override fun onListenerDisconnected() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // 通知侦听器断开连接 - 请求重新绑定
-            requestRebind(ComponentName(this, NotificationListenerService::class.java))
-        }
+        // 通知侦听器断开连接 - 请求重新绑定
+        requestRebind(ComponentName(this, NotificationListenerService::class.java))
     }
 }

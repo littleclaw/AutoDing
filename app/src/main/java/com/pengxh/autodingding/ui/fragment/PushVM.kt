@@ -11,7 +11,7 @@ import com.pengxh.autodingding.bean.PushMessage
 import com.pengxh.autodingding.bean.PushResp
 import com.pengxh.autodingding.net.RetrofitManager
 import com.pengxh.autodingding.net.api.PushApi
-import com.pengxh.autodingding.service.PushCoreService
+import com.pengxh.autodingding.service.PushReceiver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -19,27 +19,27 @@ class PushVM: BaseViewModel() {
     val pushResult = MutableLiveData<PushResp?>()
 
     fun pushCheck(regId:String) {
-        pushCmd(regId, PushCoreService.MSG_MAIL_CHECK)
+        pushCmd(regId, PushReceiver.MSG_MAIL_CHECK)
     }
 
     fun pushSign(regId:String) {
-        pushCmd(regId, PushCoreService.MSG_SIGN)
+        pushCmd(regId, PushReceiver.MSG_SIGN)
     }
 
     fun pushStatusFetch(regId: String){
-        pushCmd(regId, PushCoreService.MSG_STATUS_REPORT)
+        pushCmd(regId, PushReceiver.MSG_STATUS_REPORT)
     }
 
     fun pushScreenShot(regId: String){
-        pushCmd(regId, PushCoreService.MSG_SCREEN_SHOT)
+        pushCmd(regId, PushReceiver.MSG_SCREEN_SHOT)
     }
 
     fun pushManualSign(regId: String){
-        pushCmd(regId, PushCoreService.MSG_MANUAL_SIGN)
+        pushCmd(regId, PushReceiver.MSG_MANUAL_SIGN)
     }
 
     fun pushMailPeriodicLog(regId: String){
-        pushCmd(regId, PushCoreService.MSG_WAKE_LOG)
+        pushCmd(regId, PushReceiver.MSG_WAKE_LOG)
     }
 
     private fun pushCmd(regId: String, cmd: String) = launch {
