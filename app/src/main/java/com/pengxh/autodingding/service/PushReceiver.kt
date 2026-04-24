@@ -17,10 +17,14 @@ import com.blankj.utilcode.util.DeviceUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.pengxh.autodingding.BaseApplication
 import com.pengxh.autodingding.AndroidxBaseActivity
 import com.pengxh.autodingding.bean.BodyMsg
 import com.pengxh.autodingding.bean.PushAudience
 import com.pengxh.autodingding.bean.PushMessage
+import com.pengxh.autodingding.health.DeviceHealthStatus
+import com.pengxh.autodingding.health.PushHealthStore
+import com.pengxh.autodingding.health.PushRuntimeManager
 import com.pengxh.autodingding.net.RetrofitManager
 import com.pengxh.autodingding.net.api.PushApi
 import com.pengxh.autodingding.ui.MainActivity
@@ -33,24 +37,37 @@ import kotlinx.coroutines.withContext
 
 class PushReceiver: JPushMessageReceiver() {
     override fun onMessage(context: Context, customMessage: CustomMessage) {
-        Log.d(TAG, customMessage.message)
+        val cmd = customMessage.message.orEmpty()
+        val senderRegId = customMessage.title.orEmpty()
+        Log.d(TAG, cmd)
+        if (MSG_HEALTH_ACK == cmd) {
+            PushHealthStore.markHeartbeatAckReceived(senderRegId)
+            return
+        }
+        if (MSG_HEALTH_PING == cmd) {
+            PushHealthStore.markHeartbeatPingReceived(senderRegId)
+            PushRuntimeManager.refreshLocalStatus()
+            replyHealthAck(senderRegId)
+            return
+        }
+        PushHealthStore.markInboundCommand(cmd)
+        PushRuntimeManager.refreshLocalStatus()
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val senderRegId = customMessage.title
-        if (MSG_MAIL_CHECK == customMessage.message) {
+        if (MSG_MAIL_CHECK == cmd) {
             wakePhone(context)
             unlockPhone(context) {
                 intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_SEND_MAIL)
                 context.startActivity(intent)
             }
             reply(senderRegId)
-        } else if (MSG_SIGN == customMessage.message) {
+        } else if (MSG_SIGN == cmd) {
             wakePhone(context)
             unlockPhone(context) {
                 intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_LAUNCH_DING)
                 context.startActivity(intent)
             }
-        } else if (MSG_STATUS_REPORT == customMessage.message) {
+        } else if (MSG_STATUS_REPORT == cmd) {
             val emailAddress = Utils.readEmailAddress()
             val manager =
                 context.getSystemService(AndroidxBaseActivity.BATTERY_SERVICE) as BatteryManager
@@ -67,27 +84,45 @@ class PushReceiver: JPushMessageReceiver() {
                     "当前${if (charging) "正在" else "未"}充电： 当前电量百分比：$curBattery %," +
                     "安卓版本:${androidAPI}, 厂商:${manufacturer},型号：${model}, 应用版本${appInfo.versionName}"
             SendMailUtil.send(emailAddress, message, "手机信息")
-        } else if (MSG_SCREEN_SHOT == customMessage.message) {
+        } else if (MSG_SCREEN_SHOT == cmd) {
             wakePhone(context)
             unlockPhone(context) {
                 intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_SCREENSHOT)
                 context.startActivity(intent)
             }
-        } else if (MSG_SLEEP == customMessage.message) {
+        } else if (MSG_SLEEP == cmd) {
             val ifLock = ScreenUtils.isScreenLock()
             if (ifLock.not()) {
                 //TODO turn off screen
             }
-        } else if (MSG_MANUAL_SIGN == customMessage.message) {
+        } else if (MSG_MANUAL_SIGN == cmd) {
             wakePhone(context)
             unlockPhone(context) {
                 intent.putExtra(MainActivity.EXTRA_ACTION, MainActivity.ACTION_MANUAL_SIGN)
                 context.startActivity(intent)
             }
-        } else if (MSG_WAKE_LOG == customMessage.message) {
+        } else if (MSG_WAKE_LOG == cmd) {
             reportWakeLog()
         }
         super.onMessage(context, customMessage)
+    }
+
+    override fun onRegister(context: Context, registrationId: String) {
+        PushHealthStore.updateRegistrationId(registrationId)
+        CacheDiskUtils.getInstance().put("pushRegId", registrationId)
+        PushRuntimeManager.refreshLocalStatus()
+        super.onRegister(context, registrationId)
+    }
+
+    override fun onConnected(context: Context, isConnected: Boolean) {
+        if (isConnected) {
+            PushHealthStore.markJPushInitialized()
+            PushRuntimeManager.syncRegistration(context)
+        } else {
+            PushHealthStore.updateLocalStatus(DeviceHealthStatus.DEGRADED)
+        }
+        PushRuntimeManager.refreshLocalStatus()
+        super.onConnected(context, isConnected)
     }
 
     private fun wakePhone(context: Context) {
@@ -169,6 +204,20 @@ class PushReceiver: JPushMessageReceiver() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun replyHealthAck(targetRegId: String) {
+        if (targetRegId.isBlank()) {
+            return
+        }
+        launchWithExpHandler {
+            withContext(Dispatchers.IO) {
+                BaseApplication.application?.applicationContext?.let {
+                    PushApiHelper.pushCommand(it, targetRegId, MSG_HEALTH_ACK)
+                }
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "MyReceiver"
         const val MSG_MAIL_CHECK = "check"
@@ -179,5 +228,7 @@ class PushReceiver: JPushMessageReceiver() {
         const val MSG_MANUAL_SIGN = "manualSign"
         const val MSG_REPLY = "reply"
         const val MSG_WAKE_LOG = "wakeLog"
+        const val MSG_HEALTH_PING = "healthPing"
+        const val MSG_HEALTH_ACK = "healthAck"
     }
 }

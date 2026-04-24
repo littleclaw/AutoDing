@@ -51,7 +51,7 @@ class WakeUpWorker(context: Context, workerParams: WorkerParameters) : Worker(co
             val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "autoDing:period:"+System.currentTimeMillis()
             )
-            wakeLock.acquire(60 * 60 * 1000)
+            wakeLock.acquire( 60 * 1000)
         }
     }
 }

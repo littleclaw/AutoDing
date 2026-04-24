@@ -9,12 +9,6 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.Operation
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.azhon.appupdate.manager.DownloadManager
 import com.blankj.utilcode.util.*
@@ -25,6 +19,7 @@ import com.pengxh.autodingding.R
 import com.pengxh.autodingding.actions.DingSignAction
 import com.pengxh.autodingding.adapter.FragAdapter
 import com.pengxh.autodingding.databinding.ActivityMainBinding
+import com.pengxh.autodingding.health.PushRuntimeManager
 import com.pengxh.autodingding.net.RetrofitManager
 import com.pengxh.autodingding.net.api.UpdateApi
 import com.pengxh.autodingding.service.BaseAccessibilityService
@@ -37,7 +32,6 @@ import com.pengxh.autodingding.utils.SendMailUtil.send
 import com.pengxh.autodingding.utils.Utils
 import kotlinx.coroutines.*
 import java.io.File
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
     private var menuItem: MenuItem? = null
@@ -64,8 +58,8 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 }
             }
         }
-        checkUpdate()
-        startPeriodicWork()
+//        checkUpdate()
+        PushRuntimeManager.bootstrap(applicationContext)
     }
 
     override fun setupTopBarLayout() {
@@ -103,27 +97,6 @@ class MainActivity : AndroidxBaseActivity<ActivityMainBinding?>() {
                 apkDescription(version.description)
                 build()
             }.download()
-        }
-    }
-
-    private fun startPeriodicWork() {
-        val periodicWorkRequest =
-            PeriodicWorkRequest.Builder(
-                WakeUpWorker::class.java,
-                1,
-                TimeUnit.HOURS,
-                5,
-                TimeUnit.MINUTES
-            )
-                .build()
-        val manager = WorkManager.getInstance(this)
-        val operation = manager.enqueueUniquePeriodicWork(
-            "wakeAndLog",
-            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-            periodicWorkRequest
-        )
-        operation.state.observe(this){
-            LogUtils.d(it.toString())
         }
     }
 

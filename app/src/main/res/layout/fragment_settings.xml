@@ -1,288 +1,345 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#F3F7FF"
-    android:orientation="vertical">
+    android:background="#F3F7FF">
 
-    <RelativeLayout
-        android:id="@+id/emailLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="邮箱设置"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/emailTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray" />
-    <RelativeLayout
-        android:id="@+id/pushLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="发送推送"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/pushTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorText"
-            android:textSize="18sp"
-            tools:text="what" />
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:background="@android:color/darker_gray"/>
-    <RelativeLayout
-        android:id="@+id/historyLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="打卡记录"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/recordSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="通知监听"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <CheckBox
-            android:id="@+id/noticeCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#CCC" />
-
-    <RelativeLayout
-        android:id="@+id/permissionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="权限检查"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:layout_width="72px"
-            android:layout_height="72px"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@mipmap/right" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#CCC" />
-
-    <RelativeLayout
-        android:id="@+id/introduceLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="使用说明"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:layout_width="72px"
-            android:layout_height="72px"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@mipmap/right" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#CCC" />
-
-    <RelativeLayout
-        android:id="@+id/testLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/tvToggleWakeLock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/keepAwake"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tvLockState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            tools:text="开"/>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#CCC" />
-
-    <RelativeLayout
-        android:id="@+id/rlVersion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/curVersion"
-            android:textColor="@color/colorText"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/appVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorText"
-            tools:text="1.0.1"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tvRegTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:text="你的推送Registration ID,用来在指令手机的推送设置里定向发指令用，目前有检查在线指令和远程打开钉钉指令"
-            android:textColor="@color/colorText" />
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tvRegValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvRegTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text=""
-            android:textColor="@color/colorText"
-            tools:text="160a3797c8f373355a2" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="邮箱设置"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/emailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                tools:text="name@example.com" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvRegValue"
-            android:orientation="horizontal">
+            android:background="?android:selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <Button
-                android:id="@+id/btnCopy"
-                style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:backgroundTint="@color/iOSGreen"
-                android:text="复制" />
+                android:text="本机状态"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/btnTestLaunchDing"
-                style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvLocalHealthValue"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:backgroundTint="@color/iOSGreen"
-                android:text="测试打开钉钉" />
+                android:layout_marginTop="6dp"
+                android:gravity="end"
+                android:maxLines="3"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                tools:text="在线" />
         </LinearLayout>
 
-    </RelativeLayout>
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保活检查"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvProtectionValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="end"
+                android:lineSpacingExtra="2dp"
+                android:textColor="@color/colorText"
+                android:textSize="14sp"
+                tools:text="保活=正常  通知=正常  无障碍=正常  电池=正常  后台=正常" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <RelativeLayout
+            android:id="@+id/pushLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="远程目标"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/pushTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                tools:text="reg-id" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:background="@android:color/darker_gray" />
+
+        <RelativeLayout
+            android:id="@+id/historyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打卡记录"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/recordSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                tools:text="0" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="通知监听"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <CheckBox
+                android:id="@+id/noticeCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#CCC" />
+
+        <RelativeLayout
+            android:id="@+id/permissionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保活权限详情"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="72px"
+                android:layout_height="72px"
+                android:layout_alignParentEnd="true"
+                android:background="@mipmap/right" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#CCC" />
+
+        <RelativeLayout
+            android:id="@+id/introduceLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="使用说明"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="72px"
+                android:layout_height="72px"
+                android:layout_alignParentEnd="true"
+                android:background="@mipmap/right" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#CCC" />
+
+        <RelativeLayout
+            android:id="@+id/testLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tvToggleWakeLock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/keepAwake"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvLockState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                tools:text="关" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#CCC" />
+
+        <RelativeLayout
+            android:id="@+id/rlVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/curVersion"
+                android:textColor="@color/colorText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/appVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                tools:text="1.0.1" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvRegTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:text="本机 Registration ID"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/tvRegValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvRegTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorText"
+                tools:text="160a3797c8f373355a2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvRegValue"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCopy"
+                    style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:backgroundTint="@color/iOSGreen"
+                    android:text="复制" />
+
+                <Button
+                    android:id="@+id/btnTestLaunchDing"
+                    style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:backgroundTint="@color/iOSGreen"
+                    android:text="打开钉钉" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

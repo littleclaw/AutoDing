@@ -1,25 +1,24 @@
 package com.pengxh.autodingding.ui.fragment
 
 import androidx.lifecycle.MutableLiveData
-import cn.jpush.android.api.JPushInterface
-import com.blankj.utilcode.util.CacheDiskUtils
 import com.blankj.utilcode.util.LogUtils
+import com.pengxh.autodingding.BaseApplication
 import com.pengxh.autodingding.base.BaseViewModel
-import com.pengxh.autodingding.bean.BodyMsg
-import com.pengxh.autodingding.bean.PushAudience
-import com.pengxh.autodingding.bean.PushMessage
 import com.pengxh.autodingding.bean.PushResp
-import com.pengxh.autodingding.net.RetrofitManager
-import com.pengxh.autodingding.net.api.PushApi
+import com.pengxh.autodingding.health.DeviceHealthStatus
+import com.pengxh.autodingding.health.PushHealthStore
+import com.pengxh.autodingding.health.PushRuntimeManager
+import com.pengxh.autodingding.service.PushApiHelper
 import com.pengxh.autodingding.service.PushReceiver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PushVM: BaseViewModel() {
     val pushResult = MutableLiveData<PushResp?>()
+    var lastCommand: String = ""
 
     fun pushCheck(regId:String) {
-        pushCmd(regId, PushReceiver.MSG_MAIL_CHECK)
+        pushCmd(regId, PushReceiver.MSG_HEALTH_PING)
     }
 
     fun pushSign(regId:String) {
@@ -43,18 +42,19 @@ class PushVM: BaseViewModel() {
     }
 
     private fun pushCmd(regId: String, cmd: String) = launch {
+        lastCommand = cmd
         pushResult.value = withContext(Dispatchers.IO){
-            val api = RetrofitManager.retrofitClient.create(PushApi::class.java)
-            val pushMessage = PushMessage()
-            pushMessage.audience = PushAudience().apply {
-                registration_id = mutableListOf(regId)
+            val context = BaseApplication.application?.applicationContext
+            val response = context?.let {
+                PushApiHelper.pushCommand(it, regId, cmd)
             }
-            pushMessage.message = BodyMsg().apply {
-                msg_content = cmd
-                title = CacheDiskUtils.getInstance().getString("pushRegId")
+            if (cmd == PushReceiver.MSG_HEALTH_PING && response?.errorCode == 0 && context != null) {
+                PushHealthStore.markHeartbeatPingSent(regId)
+                PushHealthStore.updateTargetStatus(DeviceHealthStatus.DEGRADED)
+                PushRuntimeManager.scheduleHeartbeatTimeout(context)
             }
             LogUtils.d("push, regId:${regId}, cmd:${cmd}")
-            api.pushMsg(pushMessage)
+            response
         }
     }
 }

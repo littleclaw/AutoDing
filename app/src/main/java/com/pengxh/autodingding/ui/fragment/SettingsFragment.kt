@@ -1,7 +1,9 @@
 package com.pengxh.autodingding.ui.fragment
 
-import android.content.*
-import android.content.pm.PackageManager
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import android.provider.Settings
@@ -20,12 +22,11 @@ import com.pengxh.autodingding.BuildConfig
 import com.pengxh.autodingding.R
 import com.pengxh.autodingding.actions.DingSignAction
 import com.pengxh.autodingding.databinding.FragmentSettingsBinding
+import com.pengxh.autodingding.health.PushHealthStore
+import com.pengxh.autodingding.health.PushRuntimeManager
 import com.pengxh.autodingding.net.RetrofitManager
 import com.pengxh.autodingding.net.api.UpdateApi
-import com.pengxh.autodingding.service.KeepOnService
-import com.pengxh.autodingding.service.NotificationMonitorService
 import com.pengxh.autodingding.ui.HistoryRecordActivity
-import com.pengxh.autodingding.ui.fragment.PushFragment.Companion.newInstance
 import com.pengxh.autodingding.utils.Constant
 import com.pengxh.autodingding.utils.Utils
 import com.pengxh.autodingding.utils.launchWithExpHandler
@@ -48,7 +49,10 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
         viewBinding!!.recordSize.text = historyBeanDao.loadAll().size.toString()
         viewBinding!!.appVersion.text = BuildConfig.VERSION_NAME
         val savedRegId = CacheDiskUtils.getInstance().getString("regId")
-        if (savedRegId != null) viewBinding!!.pushTextView.text = savedRegId
+        if (savedRegId != null) {
+            viewBinding!!.pushTextView.text = savedRegId
+        }
+        refreshRuntimeStatus()
     }
 
     private val settingsLauncher =
@@ -58,20 +62,16 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
             }
         }
 
-    //检测通知监听服务是否被授权
     private val isNotificationEnable: Boolean
         get() {
-            val packageNames =
-                NotificationManagerCompat.getEnabledListenerPackages(requireContext())
+            val packageNames = NotificationManagerCompat.getEnabledListenerPackages(requireContext())
             return packageNames.contains(context?.packageName)
         }
 
     override fun initEvent() {
         if (!isNotificationEnable) {
             try {
-                //打开通知监听设置页面
-                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-                settingsLauncher.launch(intent)
+                settingsLauncher.launch(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -85,42 +85,31 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
         viewBinding!!.historyLayout.setOnClickListener(this)
         viewBinding!!.introduceLayout.setOnClickListener(this)
         viewBinding!!.pushLayout.setOnClickListener(this)
-//        viewBinding!!.testLayout.setOnClickListener(this)
         viewBinding!!.rlVersion.setOnClickListener(this)
         viewBinding!!.tvToggleWakeLock.setOnClickListener(this)
         viewBinding!!.permissionLayout.setOnClickListener(this)
     }
 
-    //切换通知监听器服务
     private fun startNotificationMonitorService() {
-        //创建常住通知栏
         Utils.createNotification()
-//        val intent = Intent(requireContext(), KeepOnService::class.java)
-//        requireActivity().startForegroundService(intent)
-
-        val pm = requireContext().packageManager
-        pm.setComponentEnabledSetting(
-            ComponentName(requireContext(), NotificationMonitorService::class.java),
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
-        )
-        pm.setComponentEnabledSetting(
-            ComponentName(requireContext(), NotificationMonitorService::class.java),
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
-        )
+        PushRuntimeManager.ensureKeepAliveService(requireContext())
+        PushRuntimeManager.rebindNotificationMonitor(requireContext())
+        PushRuntimeManager.refreshSetupState(requireContext())
         viewBinding!!.noticeCheckBox.isChecked = isNotificationEnable
+        refreshRuntimeStatus()
     }
 
-    private fun toggleWakeLock(){
-        if (wakeLock == null){
+    private fun toggleWakeLock() {
+        if (wakeLock == null) {
             val powerManager = requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "bright::always")
-            wakeLock!!.acquire(3*24*60*60*1000L /*1day*/)
+            wakeLock!!.acquire(3 * 24 * 60 * 60 * 1000L)
             viewBinding!!.tvLockState.text = "开"
-        } else if(wakeLock!!.isHeld){
+        } else if (wakeLock!!.isHeld) {
             wakeLock!!.release()
             viewBinding!!.tvLockState.text = "关"
-        }else{
-            wakeLock!!.acquire(3*24*60*60*1000L /*1day*/)
+        } else {
+            wakeLock!!.acquire(3 * 24 * 60 * 60 * 1000L)
             viewBinding!!.tvLockState.text = "开"
         }
     }
@@ -142,7 +131,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
                     activity,
                     "功能介绍",
                     context?.getString(R.string.about),
-                    "看完了",
+                    "确定",
                     true
                 )
             }
@@ -163,7 +152,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
             R.id.pushLayout -> {
                 parentFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragmentContainer, newInstance())
+                    .replace(R.id.fragmentContainer, PushFragment.newInstance())
                     .commit()
             }
             R.id.rlVersion -> {
@@ -172,15 +161,14 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
             R.id.testLayout -> {
                 val action = DingSignAction()
                 if (actionJob?.isCompleted.let { it != null && !it }) {
-                    toast("有正在运行的任务")
+                    toast("已有任务正在运行")
                     return
                 }
                 actionJob = launchWithExpHandler {
                     activity?.let { action.run(it) }
                 }
                 actionJob?.invokeOnCompletion {
-                    Utils.showAlertDialog(activity, "执行日志", action.message.toString(),
-                        "确定", true)
+                    Utils.showAlertDialog(activity, "执行日志", action.message.toString(), "确定", true)
                 }
             }
             R.id.tvToggleWakeLock -> {
@@ -196,6 +184,22 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
     }
 
     override fun setupTopBarLayout() {
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshRuntimeStatus()
+    }
+
+    private fun refreshRuntimeStatus() {
+        context ?: return
+        val setupState = PushRuntimeManager.refreshSetupState(requireContext())
+        PushRuntimeManager.refreshLocalStatus()
+        val localSnapshot = PushHealthStore.getLocalSnapshot()
+        viewBinding?.tvLocalHealthValue?.text = PushHealthStore.describeStatus(localSnapshot.status)
+        viewBinding?.tvProtectionValue?.text = PushHealthStore.buildSetupSummary(setupState)
+        viewBinding?.tvRegValue?.text = JPushInterface.getRegistrationID(context)
+        viewBinding?.noticeCheckBox?.isChecked = isNotificationEnable
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -216,7 +220,7 @@ class SettingsFragment : AndroidxBaseFragment<FragmentSettingsBinding?>(), View.
                 apkDescription(version.description)
                 build()
             }.download()
-            if(version.versionCode == AppUtils.getAppVersionCode()){
+            if (version.versionCode == AppUtils.getAppVersionCode()) {
                 ToastUtils.showLong("已是最新版本")
             }
         }

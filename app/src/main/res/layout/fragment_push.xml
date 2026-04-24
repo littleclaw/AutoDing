@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.PushFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clHeader"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:elevation="6dp"
         android:background="@color/iOSGreen"
-        android:orientation="horizontal">
+        android:elevation="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ivBack"
@@ -26,8 +26,8 @@
             android:contentDescription="@string/back"
             android:padding="15dp"
             android:src="@drawable/svg_back"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -45,80 +45,117 @@
 
     <EditText
         android:id="@+id/etTargetRegId"
+        style="@style/Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
         android:layout_marginTop="8dp"
         android:hint="@string/input_regId"
-        style="@style/Widget.AppCompat.EditText"
-        app:layout_constraintTop_toBottomOf="@id/clHeader"/>
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@id/clHeader" />
+
+    <TextView
+        android:id="@+id/tvLocalStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="本机：未知"
+        android:textColor="#111111"
+        app:layout_constraintTop_toBottomOf="@id/etTargetRegId" />
+
+    <TextView
+        android:id="@+id/tvTargetStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="目标：未知"
+        android:textColor="#111111"
+        app:layout_constraintTop_toBottomOf="@id/tvLocalStatus" />
+
+    <TextView
+        android:id="@+id/tvTargetLastAck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="上次响应：暂无"
+        android:textColor="#444444"
+        app:layout_constraintTop_toBottomOf="@id/tvTargetStatus" />
 
     <Button
         android:id="@+id/btnCheck"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/etTargetRegId"
         android:backgroundTint="@color/sky"
-        android:text="推送检查指令(会点亮屏幕)"/>
+        android:text="发送心跳检测"
+        app:layout_constraintTop_toBottomOf="@id/tvTargetLastAck" />
+
     <Button
         android:id="@+id/btnStatus"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/btnCheck"
         android:backgroundTint="@color/cyan"
-        android:text="推送获取手机电量状态指令(不会亮屏)"/>
+        android:text="获取手机状态"
+        app:layout_constraintTop_toBottomOf="@id/btnCheck" />
+
     <Button
         android:id="@+id/btnScreenShot"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/btnStatus"
         android:backgroundTint="@color/orange"
-        android:text="推送截屏指令(会亮屏)"/>
+        android:text="请求截图"
+        app:layout_constraintTop_toBottomOf="@id/btnStatus" />
+
     <Button
         android:id="@+id/btnPush"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        app:layout_constraintTop_toBottomOf="@id/btnScreenShot"
         android:backgroundTint="@color/weChatGreen"
-        android:text="推送打开钉钉指令"/>
+        android:text="打开钉钉"
+        app:layout_constraintTop_toBottomOf="@id/btnScreenShot" />
 
     <TextView
         android:id="@+id/tvTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnPush"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="18sp"
-        android:textColor="#000"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="测试功能:"/>
+        android:text="测试功能："
+        android:textColor="#000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPush" />
+
     <Button
         android:id="@+id/btnManualSign"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        app:layout_constraintTop_toBottomOf="@id/tvTest"
         android:backgroundTint="#F00"
-        android:text="推送辅助手动打卡指令(测试功能)"/>
+        android:text="执行手动打卡"
+        app:layout_constraintTop_toBottomOf="@id/tvTest" />
+
     <Button
         android:id="@+id/btnMailPeriodicLog"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        app:layout_constraintTop_toBottomOf="@id/btnManualSign"
         android:backgroundTint="@color/colorAppThemeLight"
         android:text="@string/mail_periodic_log"
-        />
+        app:layout_constraintTop_toBottomOf="@id/btnManualSign" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
