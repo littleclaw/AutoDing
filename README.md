@@ -1,13 +1,40 @@
 # AutoDing
-+ 目前release中的包名于24年圣诞节下午又又被加入黑名单了，为了不被再一次被加入黑名单，之后将不再提供APK包的更新，但我会详尽列出各位自行打包需要的步骤，请各位自行下载源码修改一个包名并做如下定制打包。
-1. 起一个包名，结构类似com.furry.rimet这种,修改app级build.gradle中applicationId,daoPackage的前缀为自己的（查找替换即可）
-2. 修改app/src/main/AndroidManifest.xml中包名，查找替换即可
-3. 重新进行gradle sync，完成后执行Build————Rebuild Project
-4. 然后去极光推送开发者后台建一个应用，用刚才自己重构的applicationId申请一个推送应用，把appKey,masterSecret保存
-5. 在app级build.gradle配置中的manifestPlaceholders中的JPUSH_APPKEY值换成上一步的appKey
-6. 在代码搜索类AuthInterceptor，替换里面的常量appKey和masterSecret
-7. （可选）打包前也可修改app/src/main/res/values/strings.xml里面的app_name值，即应用名，防止应用名也被屏蔽
-8. 重新打包，然后分别装在两个手机上，配置推送regID，测试是否可发送响应指令
++ 目前release中的包名于24年圣诞节下午又又被加入黑名单了，为了不被再一次被加入黑名单，之后将不再提供APK包的更新。请各位自行下载源码，借助 **Claude Code** 或 **OpenAI Codex** 等 AI 编程工具完成包名重构并打包，步骤如下：
+
+### 方式一：使用 Claude Code（推荐）
+
+1. 安装 [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)，在项目根目录执行 `claude` 进入交互式会话
+2. 输入类似以下指令让 Claude 自动完成包名重构：
+   ```
+   请将本项目的包名从 com.pengxh.autodingding 重构为 <你的新包名，如 com.furry.rimet>，
+   需要同步修改以下位置：
+   - app/build.gradle 中的 applicationId 和 daoPackage
+   - app/src/main/AndroidManifest.xml 中的 package 声明
+   - app/agconnect-services.json 中的包名引用
+   - 所有 Kotlin/Java 源文件中的 package 声明和 import 语句
+   - （可选）app/src/main/res/values/strings.xml 中的 app_name
+   ```
+3. Claude 会自动完成全项目范围内的查找替换和文件迁移，确认修改无误后继续：
+4. 前往 [极光推送开发者后台](https://www.jiguang.cn) 创建应用，用新的 applicationId 申请推送服务，获取 **appKey** 和 **masterSecret**
+5. 让 Claude 替换推送配置：
+   ```
+   请将以下配置更新为我的极光推送凭证：
+   - app/build.gradle 中 manifestPlaceholders 的 JPUSH_APPKEY 值改为 <你的appKey>
+   - AuthInterceptor 类中的 appKey 和 masterSecret 常量改为 <你的值>
+   ```
+6. 让 Claude 执行打包构建：
+   ```
+   请执行 gradle assembleRelease 进行 Release 打包
+   ```
+7. 将生成的 APK 分别安装到两台手机上，配置推送 regID，测试指令收发是否正常
+
+### 方式二：使用 OpenAI Codex
+
+1. 在 [ChatGPT](https://chat.openai.com) 或 Codex CLI 中打开本项目
+2. 输入类似的包名重构指令，Codex 会自动完成源码中的包名替换和文件结构调整
+3. 按上述步骤 4-7 配置极光推送凭证并打包测试
+
+> **提示：** AI 工具能自动处理跨文件的包名一致性，比手动查找替换更可靠。但仍建议在打包前检查修改结果，确保没有遗漏
 -------------
 钉钉打卡，包括定时打卡和远程推送打卡,定时打卡功能是根据AutoDingDing项目修改而来，不是此项目重点，此项目主要功能在于实现远程
 打开钉钉，从而完成极速打卡，其主要是用极光推送SDK实现网络指令下发。
